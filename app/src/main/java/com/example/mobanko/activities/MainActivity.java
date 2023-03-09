@@ -1,8 +1,10 @@
-package com.example.mobanko;
+package com.example.mobanko.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+
+import com.example.mobanko.R;
 
 public class MainActivity extends AppCompatActivity {
 
