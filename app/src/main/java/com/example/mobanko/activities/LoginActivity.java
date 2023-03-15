@@ -35,6 +35,19 @@ public class LoginActivity extends AppCompatActivity {
                 login();
             }
         });
+
+        binding.regiserTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                toOnboardingActivity();
+            }
+        });
+    }
+
+    private void toOnboardingActivity() {
+        var intent = new Intent(this, OnboardingActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
     }
 
     private void login(){
