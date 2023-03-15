@@ -7,7 +7,7 @@ import android.os.Bundle;
 import com.example.mobanko.activities.onboardingFragments.OnboardingPersonalData;
 import com.example.mobanko.databinding.ActivityOnboardingBinding;
 
-import lombok.var;
+
 
 public class OnboardingActivity extends AppCompatActivity {
 
@@ -21,7 +21,8 @@ public class OnboardingActivity extends AppCompatActivity {
 
         getSupportFragmentManager().beginTransaction()
                 .setReorderingAllowed(true)
-                .add(binding.fragmentContainerView.getId(), OnboardingPersonalData.class, null)
+                .add(binding.fragmentContainerView2.getId(),
+                        OnboardingPersonalData.class, null)
                 .commit();
     }
 }
