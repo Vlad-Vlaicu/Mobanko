@@ -6,7 +6,8 @@ import android.os.Bundle;
 
 import com.example.mobanko.activities.onboardingFragments.OnboardingPersonalData;
 import com.example.mobanko.databinding.ActivityOnboardingBinding;
-
+import com.example.mobanko.entities.Account;
+import com.example.mobanko.entities.User;
 
 
 public class OnboardingActivity extends AppCompatActivity {
@@ -24,5 +25,8 @@ public class OnboardingActivity extends AppCompatActivity {
                 .add(binding.fragmentContainerView2.getId(),
                         OnboardingPersonalData.class, null)
                 .commit();
+
+        var acc = new User();
+        
     }
 }
