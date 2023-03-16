@@ -16,10 +16,6 @@ import androidx.fragment.app.Fragment;
 
 import com.example.mobanko.R;
 import com.example.mobanko.databinding.FragmentOnboardingPersonalDataBinding;
-import com.example.mobanko.entities.Account;
-import com.example.mobanko.entities.User;
-
-import org.checkerframework.checker.units.qual.A;
 
 
 public class OnboardingPersonalData extends Fragment {
@@ -92,18 +88,21 @@ public class OnboardingPersonalData extends Fragment {
                 if(name.isEmpty()){
                     warningMessage.setText("Campul de nume nu poate fi liber!");
                     warningMessage.setVisibility(VISIBLE);
+                    return;
                 }
 
-                //TODO: send to nextFragmentData
+                var bundle = new Bundle();
+                bundle.putString("userName", name);
+
 
                 var nextFragment = new OnboardingEmail();
+                nextFragment.setArguments(bundle);
+
                 getFragmentManager().beginTransaction()
                         .replace(R.id.fragmentContainerView2, nextFragment)
                         .commit();
-
             }
         });
-
 
         return view;
     }

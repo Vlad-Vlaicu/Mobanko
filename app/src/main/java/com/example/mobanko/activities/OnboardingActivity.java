@@ -25,8 +25,5 @@ public class OnboardingActivity extends AppCompatActivity {
                 .add(binding.fragmentContainerView2.getId(),
                         OnboardingPersonalData.class, null)
                 .commit();
-
-        var acc = new User();
-        
     }
 }
