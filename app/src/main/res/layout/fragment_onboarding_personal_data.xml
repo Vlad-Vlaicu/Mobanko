@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    tools:context=".activities.onboardingFragments.OnboardingPersonalData">
+
+    <TextView
+        android:id="@+id/greetingTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Salut, cum te numesti?"
+        android:fontFamily="@font/mainfonttitle"
+        android:textStyle="bold"
+        android:textSize="20dp"
+        android:textColor="@color/textColor1"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.057" />
+
+    <TextView
+        android:id="@+id/completeNameTextView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="28dp"
+        android:fontFamily="@font/mainfonttitle"
+        android:text="Numele"
+        android:textColor="@color/textColor1"
+        android:textSize="15dp"
+        android:textStyle="bold"
+        android:paddingBottom="5dp"
+        app:layout_constraintStart_toStartOf="@+id/completeNameTextView"
+        app:layout_constraintTop_toBottomOf="@+id/completeNameTextView" />
+
+    <TextView
+        android:id="@+id/completeNameTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="52dp"
+        android:text="Hai sa ne cunoastem. Completeaza numele."
+        android:fontFamily="@font/mainfonttext"
+        android:textColor="@color/textColor1"
+        android:textSize="15dp"
+        android:padding="5dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.192"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/greetingTextView"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <EditText
+        android:id="@+id/editTextPersonNameOnboarding"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/edittextcustom"
+        android:ems="10"
+        android:fontFamily="@font/mainfonttext"
+        android:hint="Numele"
+        android:inputType="textPersonName"
+        android:padding="10dp"
+        android:paddingStart="20dp"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
+        android:textColor="@color/textColor1"
+        android:textSize="15dp"
+        app:layout_constraintStart_toStartOf="@+id/completeNameTextView2"
+        app:layout_constraintTop_toBottomOf="@+id/warningTextView" />
+
+    <TextView
+        android:id="@+id/warningTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:text="Camp obligatoriu!"
+        android:textColor="@color/red"
+        android:textSize="14dp"
+        android:visibility="gone"
+        android:fontFamily="@font/mainfonttext"
+        android:paddingEnd="10dp"
+        android:paddingBottom="2dp"
+        app:layout_constraintStart_toStartOf="@+id/completeNameTextView2"
+        app:layout_constraintTop_toBottomOf="@+id/completeNameTextView2" />
+
+    <CheckBox
+        android:id="@+id/conditioncheckBox1"
+        android:layout_width="330dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:fontFamily="@font/mainfonttext"
+        android:textColor="@color/textColor1"
+        android:textSize="15dp"
+        android:padding="5dp"
+        android:text="Am citit si am inteles informarea privind protectia datelor cu caracter personal."
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/editTextPersonNameOnboarding"
+        app:layout_constraintTop_toBottomOf="@+id/editTextPersonNameOnboarding" />
+
+    <CheckBox
+        android:id="@+id/conditioncheckBox2"
+        android:layout_width="330dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:fontFamily="@font/mainfonttext"
+        android:padding="5dp"
+        android:text="Sunt de acord cu prelucrarea datelor mele biometrice in scopul identificarii"
+        android:textColor="@color/textColor1"
+        android:textSize="15dp"
+        android:clickable="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/editTextPersonNameOnboarding"
+        app:layout_constraintTop_toBottomOf="@+id/conditioncheckBox1" />
+
+    <TextView
+        android:id="@+id/continueTextViewDisabled"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="76dp"
+        android:padding="10dp"
+        android:text=" Continua "
+        android:textAllCaps="false"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:textSize="20dp"
+        android:textStyle="bold"
+        android:background="@drawable/buttoncustomdisabled"
+        android:fontFamily="@font/mainfonttitle"
+        android:clickable="false"
+        android:visibility="visible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/conditioncheckBox2"
+        />
+
+    <TextView
+        android:id="@+id/continueTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="76dp"
+        android:padding="10dp"
+        android:text=" Continua "
+        android:textAllCaps="false"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:textSize="20dp"
+        android:textStyle="bold"
+        android:background="@drawable/buttoncustom"
+        android:fontFamily="@font/mainfonttitle"
+        android:clickable="true"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/conditioncheckBox2"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

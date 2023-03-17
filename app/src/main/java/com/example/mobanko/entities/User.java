@@ -1,15 +1,22 @@
 package com.example.mobanko.entities;
 
+import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Data
-public class User {
+@NoArgsConstructor
+public class User implements Serializable {
 
     private Long id;
     private String name;
     private String email;
     private String phoneNumber;
     private List<Account> accounts;
+    private LocalDateTime creationDate;
+    private LocalDateTime accountValidatedDate;
 }
