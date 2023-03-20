@@ -1,5 +1,6 @@
 # General notes
 Default conditions, applicable in each flux: the user must have the application installed and have a working internet connection.
+
 A user being "recorded" is shorthand for only requiring the second factor in authentication.
 
 # Account specification flux
@@ -27,6 +28,7 @@ A user being "recorded" is shorthand for only requiring the second factor in aut
 * 1. The system will send a request to the database about the last logged in user and whether the data is still valid.
 * 2. The database will confirm the credentials that were last used.
 * 3. The system will proceed to the "Biometric authentication" flux.
+
  Post-condition: the user is recorded.
 ## Alternatives
 * 2. 1. If the database does not confirm the credentials, enter flux "Account specification".
