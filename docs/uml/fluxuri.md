@@ -3,6 +3,19 @@ Default conditions, applicable in each flux: the user must have the application 
 
 A user being "recorded" is shorthand for only requiring the second factor in authentication.
 
+Use cases are as follows: [account actions](acct-actions.png), [standard operations](authd-actions.png), [user actions](regd-auth.png)
+
+# Fast-forward authentication flux
+## Main flux
+ Pre-condition: the user must have been logged in during last use.
+* 1. The system will send a request to the database about the last logged in user and whether the data is still valid.
+* 2. The database will confirm the credentials that were last used.
+* 3. The system will proceed to the "Biometric authentication" flux.
+
+ Post-condition: the user is recorded.
+## Alternatives
+* 2. 1. If the database does not confirm the credentials, enter flux "Account specification".
+
 # Account specification flux
 ## Main flux
  Pre-condition: the user must not be already logged in or recorded.
@@ -21,18 +34,8 @@ A user being "recorded" is shorthand for only requiring the second factor in aut
      2. If the button pressed at step 2 is "log in via OTP", send an OTP to the user.
 * 5. 1. If the button pressed at step 2 is "Log in via OTP", continue with flux "OTP Authentication".
      2. If the button pressed at step 2 is "Log in via fingerprint", continue with flux "Biometric authentication".
-## [Diagram](/otp-login-flux.png)
-
-# Fast-forward authentication flux
-## Main flux
- Pre-condition: the user must have been logged in during last use.
-* 1. The system will send a request to the database about the last logged in user and whether the data is still valid.
-* 2. The database will confirm the credentials that were last used.
-* 3. The system will proceed to the "Biometric authentication" flux.
-
- Post-condition: the user is recorded.
-## Alternatives
-* 2. 1. If the database does not confirm the credentials, enter flux "Account specification".
+## Diagram
+[This sequence](otp-login-flux.png), steps 5 - 9.
 
 # OTP authentication flux
 ## Main flux
@@ -51,16 +54,20 @@ A user being "recorded" is shorthand for only requiring the second factor in aut
         3. The user will then be returned to step 6.
 
         Note: this redirection can take place at most 2 times.
-## [Diagram](/otp-login-flux.png)
+## Diagram
+[This sequence](otp-login-flux.png), steps 12 - 16.
 
 # Biometric authentication flux
 ## Main flux
  Pre-condition: the user must be recorded but not already logged in and have a phone capable of reading fingerprints.
 * 1. The system will display the "Input fingerprint" screen.
-* 2. The user should input their fingerprint.
+* 2. The user should input their fingerprint. (Methods to do so vary across devices.)
 * 3. The application will perform internal checks to ensure the same person that unlocked the phone is entering the application.
 * 4. The user will be able to select an account to view.
 
  Post-condition: the user is authenticated and able to perform standard operations.
 ## Alternatives
 * 3. 1. If the application does not recognize the fingerprint, return to step 2. (This can happen 4 times at most.)
+## Diagram
+[This sequence](ff-biometric-login-flux.png), steps 4 - 7.
+
