@@ -11,6 +11,7 @@ A user being "recorded" is shorthand for only requiring the second factor in aut
 * 3. The system will check the data formatting and forward it to the external database.
 * 4. The database will validate the data against its internal resources and forward a confirmation to the application.
 * 5. The system will display a screen, depending on the button pressed.
+
  Post-condition: the user is recorded.
 ## Alternatives 
 * 3. 1. If the data format is incorrect (such as an email address lacking a '@'), the user will be returned to step 2.
@@ -41,12 +42,14 @@ A user being "recorded" is shorthand for only requiring the second factor in aut
 * 3. The application will send the code back to the database.
 * 4. The database will validate the code and send a confirmation message.
 * 5. The user will be then able to select an account to view.
+
  Post-condition: the user is authenticated and able to perform standard operations.
 ## Alternatives
 * 4. 1. If the code that was inputted is incorrect:
         1. The database will send an infirmation to the application.
         2. The database will send a new SMS, with a new code.
         3. The user will then be returned to step 6.
+
         Note: this redirection can take place at most 2 times.
 ## [Diagram](/otp-login-flux.png)
 
@@ -57,6 +60,7 @@ A user being "recorded" is shorthand for only requiring the second factor in aut
 * 2. The user should input their fingerprint.
 * 3. The application will perform internal checks to ensure the same person that unlocked the phone is entering the application.
 * 4. The user will be able to select an account to view.
+
  Post-condition: the user is authenticated and able to perform standard operations.
 ## Alternatives
 * 3. 1. If the application does not recognize the fingerprint, return to step 2. (This can happen 4 times at most.)
