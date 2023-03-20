@@ -19,4 +19,9 @@ public class User implements Serializable {
     private List<Account> accounts;
     private LocalDateTime creationDate;
     private LocalDateTime accountValidatedDate;
+
+    // TODO
+    public static User getUserById(final Long id){
+        return new User(1L, "name", "email", "000", new ArrayList<>());
+    }
 }
