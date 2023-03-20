@@ -3,7 +3,7 @@ Default conditions, applicable in each flux: the user must have the application 
 
 A user being "recorded" is shorthand for only requiring the second factor in authentication.
 
-Use cases are as follows: [account actions](acct-actions.png), [standard operations](authd-actions.png), [user actions](regd-auth.png)
+Use cases are as follows: [account actions](acct-actions.png), [standard operations](authd-actions.png), [user actions](regd-auth.png).
 
 # Fast-forward authentication flux
 ## Main flux
@@ -29,8 +29,8 @@ Use cases are as follows: [account actions](acct-actions.png), [standard operati
 ## Alternatives 
 * 3. 1. If the data format is incorrect (such as an email address lacking a '@'), the user will be returned to step 2.
 * 4. 1. If the database determines the data is incorrect:
-        2. The database will send an infirmation to the application.
-        3. The user will be then returned to step 2.
+        * 2. The database will send an infirmation to the application.
+        * 3. The user will be then returned to step 2.
      2. If the button pressed at step 2 is "log in via OTP", send an OTP to the user.
 * 5. 1. If the button pressed at step 2 is "Log in via OTP", continue with flux "OTP Authentication".
      2. If the button pressed at step 2 is "Log in via fingerprint", continue with flux "Biometric authentication".
@@ -49,9 +49,9 @@ Use cases are as follows: [account actions](acct-actions.png), [standard operati
  Post-condition: the user is authenticated and able to perform standard operations.
 ## Alternatives
 * 4. 1. If the code that was inputted is incorrect:
-        1. The database will send an infirmation to the application.
-        2. The database will send a new SMS, with a new code.
-        3. The user will then be returned to step 6.
+        * 1. The database will send an infirmation to the application.
+        * 2. The database will send a new SMS, with a new code.
+        * 3. The user will then be returned to step 6.
 
         Note: this redirection can take place at most 2 times.
 ## Diagram
