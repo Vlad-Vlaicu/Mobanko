@@ -1,8 +1,4 @@
 ## General notes
-Default conditions, applicable in each flux: the user must have the application installed and have a working internet connection.
-
-A user being "recorded" is shorthand for only requiring the second factor in authentication.
-
 Use cases are as follows: [account actions](acct-actions.png), [standard operations](authd-actions.png), [user actions](regd-auth.png).
 
 ## Fast-forward authentication flux
