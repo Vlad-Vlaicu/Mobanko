@@ -1,4 +1,4 @@
-# * 4. System models
+# 4. System models
 ## General notes
 Use cases are as follows: [account actions](acct-actions.png), [standard operations](authd-actions.png), [user actions](regd-auth.png).
 
