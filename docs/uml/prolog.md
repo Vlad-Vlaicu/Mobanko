@@ -26,7 +26,7 @@ There will be only three categories of individuals:
 * 1. Users, who are capable of performing standard operations. Estimated number: ~10.000. Competency required: reading knowledge, basic level of familiarity with technical financial terms.
 * 2. Providers, who will provide services sold through the platform. Estimated number: ~20. Competency required: familiarity with financial terms.
 * 3. Other individuals who have a bank account but do not directly interact with the system; they are indirectly interacting by receiving and sending money by transfers from the system. Estimated number: ~4 bln. Competency required: various.
-Estimated frequency of system interaction by any individual is expected to be ~3/day.
+Estimated frequency of system interaction by any individual is expected to be ~0.03/day on average.
 ## System requirements
 The device required to use the system should have the minimum requirements as specified by the operating system Android 10, and be running said system or a more recent version. The device should also have celular signal, and optionally be capable of reading fingerprints for biometric authentication.
 ## Natural requirements
