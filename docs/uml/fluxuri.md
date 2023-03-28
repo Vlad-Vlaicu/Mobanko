@@ -30,7 +30,6 @@ Use cases are as follows: [account actions](acct-actions.png), [standard operati
 * 4. 1. If the database determines the data is incorrect:
         * 1. The database will send an infirmation to the application.
         * 2. The user will be then returned to step 2.
-     2. If the button pressed at step 2 is "log in via OTP", send an OTP to the user.
 * 5. 1. If the button pressed at step 2 is "Log in via OTP", continue with flux "OTP Authentication".
      2. If the button pressed at step 2 is "Log in via fingerprint", continue with flux "Biometric authentication".
 ### Diagram
@@ -39,18 +38,19 @@ Use cases are as follows: [account actions](acct-actions.png), [standard operati
 ## OTP authentication flux
 ### Main flux
  Pre-condition: the user must be recorded but not logged in and have cell signal available.
-* 1. The system will display the "Input code" screen.
-* 2. The user should input the code received.
-* 3. The application will send the code back to the database.
-* 4. The database will validate the code and send a confirmation message.
-* 5. The user will be then able to select an account to view.
+* 1. The database will send an SMS containing the OTP to the user.
+* 2. The system will display the "Input code" screen.
+* 3. The user should input the code received.
+* 4. The application will send the code back to the database.
+* 5. The database will validate the code and send a confirmation message.
+* 6. The user will then be able to select an account to view, or directly enter their account should they only have one.
 
  Post-condition: the user is authenticated and able to perform standard operations.
 ### Alternatives
 * 4. 1. If the code that was inputted is incorrect:
         * 1. The database will send an infirmation to the application.
         * 2. The database will send a new SMS, with a new code.
-        * 3. The user will then be returned to step 6.
+        * 3. The user will then be returned to step 1.
 
         Note: this redirection can take place at most 2 times.
 ### Diagram
@@ -62,7 +62,7 @@ Use cases are as follows: [account actions](acct-actions.png), [standard operati
 * 1. The system will display the "Input fingerprint" screen.
 * 2. The user should input their fingerprint. (Methods to do so vary across devices.)
 * 3. The application will perform internal checks to ensure the same person that unlocked the phone is entering the application.
-* 4. The user will be able to select an account to view.
+* 4. The user will be able to select an account to view, or directly enter their account should they only have one.
 
  Post-condition: the user is authenticated and able to perform standard operations.
 ### Alternatives
@@ -82,13 +82,40 @@ Use cases are as follows: [account actions](acct-actions.png), [standard operati
 None.
 ### [Diagram](statistics-flux.png)
 
-## Transfer flux
+## Transfer (transaction) flux
 ### Main flux
- Pre-condition: the user must be lcapable of standard operations.
+ Pre-condition: the user must be capable of standard operations.
 * 1. The user will press the "New transaction" button.
 * 2. The system will request recipient details from the user.
-* 3. The user should 
- Post-condition: the user will see the desired result.
+* 3. The user should complete said details, most importantly the IBAN of the account.
+* 4. The system will send a query to the database confirming all the details.
+* 5. The database will send a confirmation of the details.
+* 6. The system will prompt the user to enter any other transaction details, notably the amount of moeny transferred.
+* 7. The user should complete said details.
+* 8. The system will confirm the details with the database in order to validate the transaction.
+* 9. The database will confirm the details.
+* 10. The system will send the transaction in full for recording and processing, along with update requests.
+* 11. The database will update itself and confirm the transaction taking place.
+* 12. The system will relay the confirmation to the user and return to the main screen.
+ Post-condition: the transaction will have been done.
 ### Alternatives
-None.
+* 5. 1. If the database does not confirm the details of the account, return to step 3.
+* 8. 1. If the database does not confirm the details of the transaction, return to step 6.
+* 10. 1. If the database does not confirm the update process:
+        * 1. Display an error message and a "continue" button.
+        * 2. The user should press the button.
+        * 3. The system will exit the flux and return to the main screen.
+        
+        Note: the postcondition will not be fulfilled.
 ### [Diagram](transaction-flux.png)
+
+## Account extract flux
+### Main flux
+ Pre-condition: the user must be capable of standard operations.
+* 1. The user will press the "Account extract" button.
+* 2. The system will request recent transaction data from the database.
+* 3. The database should relay the data to the system.
+* 4. The system will process the data into the standard viewing format, in a widely recognized electronic format.
+* 5. The system will save the data to the filesystem and display it to the user.
+* 6. The system will return to the main screen.
+ Post-condition: the user will have a copy of their recent transactions for viewing and printing.
