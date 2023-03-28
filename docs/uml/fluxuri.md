@@ -1,6 +1,9 @@
 # 4. System models
 ## General notes
-Use cases are as follows: [account actions](acct-actions.png), [standard operations](authd-actions.png), [user actions](regd-auth.png).
+Contexts and use cases are as follows:
+* 1. [Account actions](acct-actions.png).
+* 2. [Standard operations](authd-actions.png).
+* 3. [User actions](regd-auth.png).
 
 ## Fast-forward authentication flux
 ### Main flux
@@ -12,8 +15,7 @@ Use cases are as follows: [account actions](acct-actions.png), [standard operati
  Post-condition: the user is recorded.
 ### Alternatives
 * 2. 1. If the database does not confirm the credentials, enter flux "Account specification".
-### Diagram
-[This sequence](ff-biometric-login-flux.png), steps 1 - 4.
+### [Diagram](ff-biometric-login-flux.png), steps 1 - 4
 
 ## Account specification flux
 ### Main flux
@@ -32,8 +34,7 @@ Use cases are as follows: [account actions](acct-actions.png), [standard operati
         * 2. The user will be then returned to step 2.
 * 5. 1. If the button pressed at step 2 is "Log in via OTP", continue with flux "OTP Authentication".
      2. If the button pressed at step 2 is "Log in via fingerprint", continue with flux "Biometric authentication".
-### Diagram
-[This sequence](otp-login-flux.png), steps 5 - 9.
+### [Diagram](otp-login-flux.png), steps 5 - 9
 
 ## OTP authentication flux
 ### Main flux
@@ -53,8 +54,7 @@ Use cases are as follows: [account actions](acct-actions.png), [standard operati
         * 3. The user will then be returned to step 1.
 
         Note: this redirection can take place at most 2 times.
-### Diagram
-[This sequence](otp-login-flux.png), steps 12 - 16.
+### [Diagram](otp-login-flux.png), steps 12 - 16
 
 ## Biometric authentication flux
 ### Main flux
@@ -67,8 +67,7 @@ Use cases are as follows: [account actions](acct-actions.png), [standard operati
  Post-condition: the user is authenticated and able to perform standard operations.
 ### Alternatives
 * 3. 1. If the application does not recognize the fingerprint, return to step 2. (This can happen 4 times at most.)
-### Diagram
-[This sequence](ff-biometric-login-flux.png), steps 4 - 7.
+### [Diagram](ff-biometric-login-flux.png) (steps 4 - 7)
 
 ## Statistics flux
 ### Main flux
@@ -97,6 +96,7 @@ None.
 * 10. The system will send the transaction in full for recording and processing, along with update requests.
 * 11. The database will update itself and confirm the transaction taking place.
 * 12. The system will relay the confirmation to the user and return to the main screen.
+
  Post-condition: the transaction will have been done.
 ### Alternatives
 * 5. 1. If the database does not confirm the details of the account, return to step 3.
@@ -125,6 +125,7 @@ None.
 * 4. The system will process the data into the standard viewing format, in a widely recognized electronic format.
 * 5. The system will save the data to the filesystem and display it to the user.
 * 6. The system will return to the main screen.
+
  Post-condition: the user will have a copy of their recent transactions for viewing and printing.
  ### [Diagram](acct-extract-flux.png)
 
@@ -136,6 +137,7 @@ None.
 * 4. The system will relay the appropriate updates to the database.
 * 5. The database will update itself and send confirmation.
 * 6. The system will display success, and the user will enter their account should they only have one, or be able to select an account to view otherwise.
+
  Post-condition: the account will be deactivated.
 ### Alternatives
 * 3. 1. If the system does not receive the confirmation:
@@ -151,6 +153,7 @@ None.
 * 3. The system will relay updates to the database requesting deactivation of the user.
 * 4. The database will update itself and relay confirmation.
 * 5. The system will display success and then the login screen.
+
  Post-condition: the user will no longer be registered.
 ### Alternatives
 * 2. 1. If the system does not receive the confirmation, follow branch 3.1 of the "Account deactivation" flux.
