@@ -1,0 +1,9 @@
+-- alegerea sdk-ului: balanta intre disponibilitate la clienti vs. usurinta de dezvoltare & securitate
+-- contrast intre 1. multitudinea de limbaje si framework-uri disponibile pt. PC si 2. limitarea pt. mobil
+-- cerinte de energie
+-- ui adaptabil
+-- necesitatea de raspundere rapida (contrast cu energia)
+-- manevrarea permisiunilor: mult mai usoara pe PC (admin / sudo) vs Android (diverse permisiuni segmentate)
+-- web apps merg si pe mobil, dar nu invers
+-- citit / utilizat multiplii senzori
+-- particularitati ale modelelor de telefon (ex. "swiping back") -> comportamente neprevazute
