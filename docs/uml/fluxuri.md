@@ -100,7 +100,14 @@ None.
  Post-condition: the transaction will have been done.
 ### Alternatives
 * 5. 1. If the database does not confirm the details of the account, return to step 3.
-* 8. 1. If the database does not confirm the details of the transaction, return to step 6.
+     2. If the account found is in a different currency:
+        1. The database will send the exchange rate of the two currencies along with the confirmation.
+        2. The flux proceeds to step 6 as normal.
+        3. The system will display the exchange in the second "details" page.
+        4. The flux proceeds to step 10 as normal.
+        5. The system will compute the update queries according to the exchange rate.
+        6. The flux then proceeds as normal.
+* 8. 1. If the database does not confirm the details of the transaction (such as not enoug money being avaliable), return to step 6.
 * 10. 1. If the database does not confirm the update process:
         * 1. Display an error message and a "continue" button.
         * 2. The user should press the button.
@@ -119,3 +126,32 @@ None.
 * 5. The system will save the data to the filesystem and display it to the user.
 * 6. The system will return to the main screen.
  Post-condition: the user will have a copy of their recent transactions for viewing and printing.
+ ### [Diagram](acct-extract-flux.png)
+
+## Account deactivation flux
+ Pre-condition: the user must be capable of standard operations, have the account be empty and have at least two accounts.
+* 1. The user will request deactivation of an account.
+* 2. The system will check whether the user still has currency in their account with the database.
+* 3. The database will reply with a confirmation.
+* 4. The system will relay the appropriate updates to the database.
+* 5. The database will update itself and send confirmation.
+* 6. The system will display success, and the user will enter their account should they only have one, or be able to select an account to view otherwise.
+ Post-condition: the account will be deactivated.
+### Alternatives
+* 3. 1. If the system does not receive the confirmation:
+        1. The system will display an error message.
+        2. The system will exit the flux, returning to the main screen.
+### [Diagram](deactivation-flux.png)
+
+## User deactivation flux
+ Pre-condition: the user must be capable of standard operation.
+* 1. The user will request their deactivation.
+* 2. For each account the user has active, steps 2-3 of the "Account deactivation" flux will be taken, disregarding the third precondition.
+* 3. For each account the user has active, steps 2-5 of the "Account deactivation" flux will be taken, disregarding the third precondition.
+* 3. The system will relay updates to the database requesting deactivation of the user.
+* 4. The database will update itself and relay confirmation.
+* 5. The system will display success and then the login screen.
+ Post-condition: the user will no longer be registered.
+### Alternatives
+* 2. 1. If the system does not receive the confirmation, follow branch 3.1 of the "Account deactivation" flux.
+* 3. 1. If the system does not receive the confirmation, follow branch 3.1 of the "Account deactivation" flux.
