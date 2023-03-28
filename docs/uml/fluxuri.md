@@ -138,7 +138,7 @@ None.
 * 5. The database will update itself and send confirmation.
 * 6. The system will display success, and the user will enter their account should they only have one, or be able to select an account to view otherwise.
 
- Post-condition: the account will be deactivated.
+ Post-condition: the account will be deactivated, remaining in the database only for tracing purposes.
 ### Alternatives
 * 3. 1. If the system does not receive the confirmation:
         1. The system will display an error message.
@@ -154,7 +154,7 @@ None.
 * 4. The database will update itself and relay confirmation.
 * 5. The system will display success and then the login screen.
 
- Post-condition: the user will no longer be registered.
+ Post-condition: the user will only be registered in the system for tracing purposes and will no longer be able to login.
 ### Alternatives
 * 2. 1. If the system does not receive the confirmation, follow branch 3.1 of the "Account deactivation" flux.
 * 3. 1. If the system does not receive the confirmation, follow branch 3.1 of the "Account deactivation" flux.
