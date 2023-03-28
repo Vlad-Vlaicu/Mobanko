@@ -26,7 +26,7 @@ There will be only three categories of individuals:
 * 1. Users, who are capable of performing standard operations. Estimated number: ~10.000. Competency required: reading knowledge, basic level of familiarity with technical financial terms.
 * 2. Providers, who will provide services sold through the platform. Estimated number: ~20. Competency required: familiarity with financial terms.
 * 3. Other individuals who have a bank account but do not directly interact with the system; they are indirectly interacting by receiving and sending money by transfers from the system. Estimated number: ~4 bln. Competency required: various.
-Estimated frequency of system interaction by any individual is expected to be ~3/day.
+Estimated frequency of system interaction by any individual is expected to be ~0.03/day on average.
 ## System requirements
 The device required to use the system should have the minimum requirements as specified by the operating system Android 10, and be running said system or a more recent version. The device should also have celular signal, and optionally be capable of reading fingerprints for biometric authentication.
 ## Natural requirements
@@ -66,26 +66,65 @@ Mobanko should have exceptional performance that guarantees speedy transactions 
 The application should be reliable, ensuring that users can access its features and functions regardless of their location or time.
 # 4. System models
 ## General notes
-Contexts and use cases are as follows:
-* 1. [Account actions](acct-actions.png).
-* 2. [Standard operations](authd-actions.png).
-* 3. [User actions](regd-auth.png).
+Use-cases are described [here](all-actions.png).
+
+## Registration flux
+### Main flux
+ Pre-condition: the user must not be already logged in.
+* 1. The user will press the "register" button.
+* 2. The system will prompt the user for their phone number.
+* 3. The user should fill it in.
+* 4. The system will validate the data format.
+* 5. The system will send the data to the database.
+* 6. The database will update and send a confirmation.
+* 7. Steps 1 - 5 of the "OTP sending" flux will be taken, along with exceptions.
+* 8. The system will prompt the user for other data: email, phone number, password.
+* 9. The user should complete the data.
+* 10. The system will validate the data format and send the data to the database for registering.
+* 11. The database will reply with a confirmation.
+* 12. Steps 1 - 5 of the "Account creation" flux will be taken.
+* 13. The system will display the main page of the new account.
+
+ Post-condition: the user will be registered, authenticated and have one account.
+### Alternatives
+* 4. 1. If the phone number format is incorrect, return to step 2.
+* 6. 1. If the database does not confirm, return to step 2.
+* 7. 1. If any exception happens, follow corresponding steps in "OTP sending" flux.
+* 10. 1. If the data format is invalid, return to step 8.
+* 11. 1. If the database does not reply with a confirmation, return to step 8.
+* 12. 1. If any exception happens, follow correspinding steps in "Account creation" flux.
+### [Diagram](registering-flux.png)
+
+## Account creation flux
+### Main flux
+ Pre-condition: the user must be authenticated.
+* 1. The user will press the button "New account".
+* 2. The system will prompt the user for the account currency.
+* 3. The user should select the wanted currency.
+* 4. The system will forward the user's data and the currency to the database.
+* 5. The database will send an update confirmation.
+* 6. The user will be able to select an account to view.
+
+ Post-condition: the user will have created a new, empty account.
+### Alternatives
+* 5. 1. If the database does not confirm, the user will be returned to step 2.
+## [Diagram](acct-creation-flux.png)
 
 ## Fast-forward authentication flux
 ### Main flux
- Pre-condition: the user must have been logged in during last use.
+ Pre-condition: the user must be recorded.
 * 1. The system will send a request to the database about the last logged in user and whether the data is still valid.
 * 2. The database will confirm the credentials that were last used.
 * 3. The system will proceed to the "Biometric authentication" flux.
 
- Post-condition: the user is recorded.
+ Post-condition: none.
 ### Alternatives
 * 2. 1. If the database does not confirm the credentials, enter flux "Account specification".
 ### [Diagram](ff-biometric-login-flux.png), steps 1 - 4
 
-## Account specification flux
+## Authentication flux
 ### Main flux
- Pre-condition: the user must not be already logged in or recorded.
+ Pre-condition: the user must not be already logged in or recorded, but be registered.
 * 1. When starting the application, the user will be presented with the login screen: an email field, a password field, two "log in" buttons and a "register" button.
 * 2. The user should complete the email and password fields and press one of the "Log in" buttons.
 * 3. The system will check the data formatting and forward it to the external database.
@@ -98,11 +137,11 @@ Contexts and use cases are as follows:
 * 4. 1. If the database determines the data is incorrect:
         * 1. The database will send an infirmation to the application.
         * 2. The user will be then returned to step 2.
-* 5. 1. If the button pressed at step 2 is "Log in via OTP", continue with flux "OTP Authentication".
-     2. If the button pressed at step 2 is "Log in via fingerprint", continue with flux "Biometric authentication".
+* 5. 1. If the button pressed at step 2 is "Log in via OTP", continue with flux "OTP sending".
+     2. If the button pressed at step 2 is "Log in via fingerprint", continue with flux "Biometric checking".
 ### [Diagram](otp-login-flux.png), steps 5 - 9
 
-## OTP authentication flux
+## OTP sending flux
 ### Main flux
  Pre-condition: the user must be recorded but not logged in and have cell signal available.
 * 1. The database will send an SMS containing the OTP to the user.
@@ -122,7 +161,7 @@ Contexts and use cases are as follows:
         Note: this redirection can take place at most 2 times.
 ### [Diagram](otp-login-flux.png), steps 12 - 16
 
-## Biometric authentication flux
+## Biometric checking flux
 ### Main flux
  Pre-condition: the user must be recorded but not already logged in and have a phone capable of reading fingerprints.
 * 1. The system will display the "Input fingerprint" screen.
@@ -174,7 +213,7 @@ None.
         5. The system will compute the update queries according to the exchange rate.
         6. The flux then proceeds as normal.
 * 8. 1. If the database does not confirm the details of the transaction (such as not enoug money being avaliable), return to step 6.
-* 10. 1. If the database does not confirm the update process:
+* 11. 1. If the database does not confirm the update process:
         * 1. Display an error message and a "continue" button.
         * 2. The user should press the button.
         * 3. The system will exit the flux and return to the main screen.
@@ -209,13 +248,13 @@ None.
 * 3. 1. If the system does not receive the confirmation:
         1. The system will display an error message.
         2. The system will exit the flux, returning to the main screen.
-### [Diagram](deactivation-flux.png)
+### [Diagram](acct-deactivation-flux.png)
 
 ## User deactivation flux
  Pre-condition: the user must be capable of standard operation.
 * 1. The user will request their deactivation.
-* 2. For each account the user has active, steps 2-3 of the "Account deactivation" flux will be taken, disregarding the third precondition.
-* 3. For each account the user has active, steps 2-5 of the "Account deactivation" flux will be taken, disregarding the third precondition.
+* 2. For each account the user has active, steps 2 - 3 of the "Account deactivation" flux will be taken, disregarding the third precondition.
+* 3. For each account the user has active, steps 2 - 5 of the "Account deactivation" flux will be taken, disregarding the third precondition.
 * 3. The system will relay updates to the database requesting deactivation of the user.
 * 4. The database will update itself and relay confirmation.
 * 5. The system will display success and then the login screen.
@@ -224,3 +263,19 @@ None.
 ### Alternatives
 * 2. 1. If the system does not receive the confirmation, follow branch 3.1 of the "Account deactivation" flux.
 * 3. 1. If the system does not receive the confirmation, follow branch 3.1 of the "Account deactivation" flux.
+### [Diagram](user-deactivation-flux.png)
+
+## Deposit creation flux
+### Main flux
+ Pre-condition: the user must be capable of standard operation.
+* 1. The user will request the creation of a deposit.
+* 2. Proceed with steps 1 - 5 of the "Account creation" flux.
+* 3. The system will retain the IBAN of the new account.
+* 4. Proceed with steps 6 - 11 of the "Transfer" flux.
+* 5. The system will display a confirmation and return to the main menu.
+
+ Post-condition: the user will have created a new account dedicated to deposits.
+### Alternatives
+* 2. 1. If any exception happens, follow the corresponding steps in the "Account creation" flux.
+* 4. 1. If any exception happens, follow the corresponding steps in the "Transfer" flux.
+### [Diagram](deposit-creation.png)
