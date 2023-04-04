@@ -2,6 +2,7 @@ package com.example.mobanko.entities;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import lombok.Data;
@@ -19,4 +20,15 @@ public class User implements Serializable {
     private List<Account> accounts;
     private LocalDateTime creationDate;
     private LocalDateTime accountValidatedDate;
+
+    // TODO
+    public static User getUserById(final Long id){
+        var user = new User();
+        user.setAccounts(new ArrayList<>());
+        user.setId(1L);
+        user.setName("nume");
+        user.setEmail("email");
+        user.setPhoneNumber("0000");
+        return user;
+    }
 }
