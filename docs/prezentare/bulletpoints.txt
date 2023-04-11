@@ -4,6 +4,6 @@
 -- ui adaptabil
 -- necesitatea de raspundere rapida (contrast cu energia)
 -- manevrarea permisiunilor: mult mai usoara pe PC (admin / sudo) vs Android (diverse permisiuni segmentate)
--- web apps merg si pe mobil, dar nu invers
 -- citit / utilizat multiplii senzori
 -- particularitati ale modelelor de telefon (ex. "swiping back") -> comportamente neprevazute
+-- implementarile de zooming sunt obligatoriu manuale
