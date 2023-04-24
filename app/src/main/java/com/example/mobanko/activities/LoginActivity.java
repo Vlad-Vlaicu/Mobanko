@@ -1,10 +1,18 @@
 package com.example.mobanko.activities;
 
+import static androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_STRONG;
+import static androidx.biometric.BiometricManager.Authenticators.DEVICE_CREDENTIAL;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.biometric.BiometricManager;
+import androidx.core.content.ContextCompat;
+import androidx.biometric.BiometricPrompt;
 
 import com.example.mobanko.databinding.ActivityLoginBinding;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -15,12 +23,18 @@ import com.google.firebase.appcheck.playintegrity.PlayIntegrityAppCheckProviderF
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
+import java.util.concurrent.Executor;
 import java.util.regex.Pattern;
 
 
 public class LoginActivity extends AppCompatActivity {
 
     private ActivityLoginBinding binding;
+    private Executor executor;
+    private BiometricPrompt biometricPrompt;
+
+    private BiometricPrompt.PromptInfo promptInfo;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +49,40 @@ public class LoginActivity extends AppCompatActivity {
         var user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
 
+            executor = ContextCompat.getMainExecutor(this);
+            biometricPrompt = new androidx.biometric.BiometricPrompt(LoginActivity.this, executor,
+                    new androidx.biometric.BiometricPrompt.AuthenticationCallback() {
+                        @Override
+                        public void onAuthenticationError(int errorCode, @NonNull CharSequence errString) {
+                            super.onAuthenticationError(errorCode, errString);
+                            Toast.makeText(getApplicationContext(), "Auth error: " + errString, Toast.LENGTH_SHORT).show();
+                        }
+
+                        @Override
+                        public void onAuthenticationSucceeded(@NonNull androidx.biometric.BiometricPrompt.AuthenticationResult result) {
+                            super.onAuthenticationSucceeded(result);
+                            var intent = new Intent(LoginActivity.this, MainActivity.class);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+
+                            startActivity(intent);
+                            finish();
+
+                        }
+
+                        @Override
+                        public void onAuthenticationFailed() {
+                            super.onAuthenticationFailed();
+                            Toast.makeText(getApplicationContext(), "Auth failed: ", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+
+            promptInfo = new BiometricPrompt.PromptInfo.Builder()
+                    .setTitle("Biometric credentials")
+                    .setSubtitle("Log in using your biometric credentials")
+                    .setAllowedAuthenticators(BIOMETRIC_STRONG | DEVICE_CREDENTIAL)
+                    .build();
+
+            biometricPrompt.authenticate(promptInfo);
 
         }
 
