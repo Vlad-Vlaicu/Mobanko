@@ -13,7 +13,7 @@ public class Account {
     private String IBAN;
     private AccountType accountType;
     private double balance;
-    private Long accountHolderID;
+    private String accountHolderID;
     private CurrencyType currencyType;
     private List<Transaction> transactions;
     private LocalDateTime creationDate;

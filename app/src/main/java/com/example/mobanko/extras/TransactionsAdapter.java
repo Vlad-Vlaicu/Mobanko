@@ -71,7 +71,7 @@ public class TransactionsAdapter extends RecyclerView.Adapter<TransactionsAdapte
             data_transaction_txt.append(transaction.getDateOfTransaction().getDayOfMonth() + "/" +
                     transaction.getDateOfTransaction().getMonth() + "/" +
                     transaction.getDateOfTransaction().getYear());
-            beneficiar_txt.append(User.getUserById(transaction.getSenderID()).getName());
+            beneficiar_txt.append(User.getUserById(transaction.getSenderID().toString()).getName());
             payment_note_txt.append(transaction.getPaymentNote());
         }
     }

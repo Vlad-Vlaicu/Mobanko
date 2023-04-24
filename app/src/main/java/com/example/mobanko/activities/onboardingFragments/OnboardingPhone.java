@@ -1,18 +1,95 @@
 package com.example.mobanko.activities.onboardingFragments;
 
+import static android.view.View.GONE;
+import static android.view.View.VISIBLE;
+
+import static androidx.core.content.ContextCompat.checkSelfPermission;
+
+import static com.example.mobanko.entities.AccountType.CURRENT_ACCOUNT;
+import static com.example.mobanko.entities.CurrencyType.RON;
+import static com.example.mobanko.generators.IBANGenerator.generateIban;
+import static com.example.mobanko.generators.IdGenerator.generateID;
+import static com.example.mobanko.generators.PasswordGenerator.generatePassword;
+
+import static java.util.Collections.emptyList;
+
+import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
+import android.os.CountDownTimer;
+import android.telephony.SmsManager;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+
+import android.Manifest;
+import android.widget.Toast;
 
 import com.example.mobanko.R;
+import com.example.mobanko.activities.MainActivity;
+import com.example.mobanko.activities.OnboardingActivity;
+import com.example.mobanko.entities.Account;
+import com.example.mobanko.entities.User;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.FirebaseException;
+import com.google.firebase.appcheck.FirebaseAppCheck;
+import com.google.firebase.appcheck.safetynet.SafetyNetAppCheckProviderFactory;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.MultiFactorAssertion;
+import com.google.firebase.auth.MultiFactorSession;
+import com.google.firebase.auth.PhoneAuthCredential;
+import com.google.firebase.auth.PhoneAuthOptions;
+import com.google.firebase.auth.PhoneAuthProvider;
+import com.google.firebase.auth.PhoneMultiFactorGenerator;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
+
+import org.checkerframework.checker.units.qual.A;
+
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 
 public class OnboardingPhone extends Fragment {
 
+    private static final int SEND_SMS_CODE = 1000;
+    FirebaseFirestore firebaseFirestore;
 
+    EditText phoneEditText;
+    EditText insertCode;
+    View view;
+    String mVerificationId;
+    PhoneAuthProvider.ForceResendingToken mResendToken;
+
+    TextView sendButton;
+    TextView sendButtonDisabled;
+
+    PhoneAuthCredential credential;
+
+    Bundle bundle;
+
+    private OnboardingActivity mActivity;
+
+    boolean messageSent = false;
+
+    String phoneNumber;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -21,9 +98,284 @@ public class OnboardingPhone extends Fragment {
     }
 
     @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof OnboardingActivity) {
+            mActivity = (OnboardingActivity) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement MyActivity");
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mActivity = null;
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        return inflater.inflate(R.layout.fragment_onboarding_phone, container, false);
+        firebaseFirestore = FirebaseFirestore.getInstance();
+
+        view = inflater.inflate(R.layout.fragment_onboarding_phone, container, false);
+
+        phoneEditText = (EditText) view.findViewById(R.id.editTextPhone);
+        insertCode = (EditText) view.findViewById(R.id.editTextNumberDecimal);
+        sendButton = (TextView) view.findViewById(R.id.textView11);
+        sendButtonDisabled = (TextView) view.findViewById(R.id.textView7);
+        var continueButton = (TextView) view.findViewById(R.id.textView10);
+        var continueButtonDisabled = (TextView) view.findViewById(R.id.textView9);
+        var errorMessage = (TextView) view.findViewById(R.id.textView12);
+
+        bundle = this.getArguments();
+
+        phoneEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if (!messageSent && phoneEditText.getText().toString().trim().length() == 10) {
+                    sendButton.setVisibility(VISIBLE);
+                    sendButtonDisabled.setVisibility(GONE);
+                } else {
+                    sendButton.setVisibility(GONE);
+                    sendButtonDisabled.setVisibility(VISIBLE);
+                }
+            }
+        });
+
+
+        insertCode.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if (insertCode.getText().toString().trim().length() == 6 && messageSent) {
+                    continueButton.setVisibility(VISIBLE);
+                    continueButtonDisabled.setVisibility(GONE);
+                } else {
+                    continueButton.setVisibility(GONE);
+                    continueButtonDisabled.setVisibility(VISIBLE);
+                }
+            }
+        });
+
+        sendButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                firebaseFirestore.collection("Phones")
+                        .get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                            @Override
+                            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                                if (!queryDocumentSnapshots.isEmpty()) {
+                                    var list = queryDocumentSnapshots.getDocuments();
+                                    String phoneText = phoneEditText.getText().toString();
+                                    for (var d : list) {
+                                        String phone = d.toString();
+                                        if (phone.equals(phoneText)) {
+                                            errorMessage.setVisibility(VISIBLE);
+                                            return;
+                                        }
+                                    }
+                                    errorMessage.setVisibility(GONE);
+                                    sendSmsOtp();
+                                    phoneNumber = phoneText;
+                                    return;
+
+                                }
+
+                                errorMessage.setVisibility(VISIBLE);
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                errorMessage.setVisibility(VISIBLE);
+                            }
+                        });
+            }
+        });
+
+        continueButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                var code = insertCode.getText().toString();
+                credential = PhoneAuthProvider.getCredential(mVerificationId, code);
+
+                System.out.println("CODE " + code + " INSERTED");
+
+                MultiFactorAssertion multiFactorAssertion
+                        = PhoneMultiFactorGenerator.getAssertion(credential);
+
+                FirebaseAuth.getInstance()
+                        .getCurrentUser()
+                        .getMultiFactor()
+                        .enroll(multiFactorAssertion, "My personal phone number")
+                        .addOnCompleteListener(
+                                new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+                                        addUserData();
+                                    }
+                                });
+            }
+        });
+
+        return view;
     }
+
+
+    private void sendSmsOtp() {
+        String phoneNumber = "+4" + phoneEditText.getText().toString();
+        System.out.println("PHONE NUMBER" + phoneNumber);
+
+
+        String email = bundle.getString("userEmail");
+
+
+        // Activity (for callback binding)
+        var callback = new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
+            @Override
+            public void onVerificationCompleted(PhoneAuthCredential credential) {
+                // Auto-retrieval or instant verification is successful.
+                // Proceed with signing up.
+                System.out.println("Verification Completed");
+
+                MultiFactorAssertion multiFactorAssertion
+                        = PhoneMultiFactorGenerator.getAssertion(credential);
+            }
+
+            @Override
+            public void onVerificationFailed(FirebaseException e) {
+                // Verification failed.
+                Toast.makeText(view.getContext(), "Verification failed: " + e.getMessage(),
+                        Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onCodeSent(String verificationId,
+                                   PhoneAuthProvider.ForceResendingToken token) {
+                // Code sent successfully. Save verification ID and token.
+                mVerificationId = verificationId;
+                mResendToken = token;
+                messageSent = true;
+
+                        /*
+                        sendButton.setVisibility(GONE);
+                        sendButtonDisabled.setVisibility(VISIBLE);
+                        new CountDownTimer(60000, 1000) {
+                            @Override
+                            public void onTick(long millisUntilFinished) {
+                                int secondsLeft = (int) (millisUntilFinished / 1000);
+                                sendButtonDisabled.setText(String.valueOf(secondsLeft));
+                            }
+
+                            @Override
+                            public void onFinish() {
+                                sendButton.setVisibility(VISIBLE);
+                                sendButtonDisabled.setVisibility(GONE);
+                                messageSent = false;
+                            }
+                        }.start();*/
+            }
+        };
+
+        var user = FirebaseAuth.getInstance().getCurrentUser();
+        user.getMultiFactor().getSession()
+                .addOnCompleteListener(
+                        new OnCompleteListener<MultiFactorSession>() {
+                            @Override
+                            public void onComplete(@NonNull Task<MultiFactorSession> task) {
+                                if (task.isSuccessful()) {
+                                    MultiFactorSession multiFactorSession = task.getResult();
+                                    PhoneAuthOptions phoneAuthOptions =
+                                            PhoneAuthOptions.newBuilder()
+                                                    .setPhoneNumber(phoneNumber)
+                                                    .setTimeout(30L, TimeUnit.SECONDS)
+                                                    .setMultiFactorSession(multiFactorSession)
+                                                    .setCallbacks(callback)
+                                                    .requireSmsValidation(true)
+                                                    .setActivity(mActivity)
+                                                    .build();
+
+                                    GoogleApiAvailability api = GoogleApiAvailability.getInstance();
+                                    int result = api.isGooglePlayServicesAvailable(getActivity());
+                                    if (result == ConnectionResult.SUCCESS) {
+                                        // SafetyNet API is available
+                                        FirebaseApp.initializeApp(getActivity());
+                                        FirebaseAppCheck firebaseAppCheck = FirebaseAppCheck.getInstance();
+                                        firebaseAppCheck.installAppCheckProviderFactory(
+                                                SafetyNetAppCheckProviderFactory.getInstance());
+                                    } else {
+                                        // SafetyNet API is not available, handle the error
+                                        // ...
+                                    }
+
+                                    PhoneAuthProvider.verifyPhoneNumber(phoneAuthOptions);
+                                }
+                            }
+                        });
+
+    }
+
+    void addUserData() {
+        String userName = bundle.getString("userName");
+        String email = bundle.getString("userEmail");
+
+        var userData = new User();
+        userData.setName(userName);
+        userData.setCreationDate(LocalDateTime.now());
+        userData.setEmail(email);
+        userData.setPhoneNumber(phoneNumber);
+        userData.setAccounts(new ArrayList<>());
+        var userId = FirebaseAuth.getInstance().getUid();
+        userData.setId(userId);
+
+        var defaultAccount = new Account();
+        defaultAccount.setAccountHolderID(userId);
+        defaultAccount.setAccountType(CURRENT_ACCOUNT);
+        defaultAccount.setCurrencyType(RON);
+        defaultAccount.setBalance(500);
+        defaultAccount.setTransactions(emptyList());
+        defaultAccount.setCreationDate(LocalDateTime.now());
+        defaultAccount.setIBAN(generateIban("40", "BCRO", generateID(8)));
+        userData.getAccounts().add(defaultAccount);
+
+        firebaseFirestore.collection("Users").document(userId).set(userData);
+        firebaseFirestore.collection("Accounts").document(defaultAccount.getIBAN()).set(defaultAccount);
+
+        DocumentReference docRef = firebaseFirestore.collection("Phones").document();
+
+        docRef.set(new HashMap<String, Object>() {{
+            put("phone", phoneNumber);
+        }});
+
+        // Create a new Intent for the target activity
+        var intent = new Intent(getActivity(), MainActivity.class);
+
+        // Set the appropriate flags to disable the back button
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+
+        // Start the target activity
+        startActivity(intent);
+    }
+
 }

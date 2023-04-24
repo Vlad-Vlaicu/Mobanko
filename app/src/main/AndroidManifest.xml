@@ -17,6 +17,9 @@
             android:name=".activities.MainActivity"
             android:screenOrientation="portrait" />
         <activity
+            android:name="com.google.android.gms.common.api.GoogleApiActivity"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+        <activity
             android:name=".activities.LoginActivity"
             android:exported="true"
             android:screenOrientation="portrait">

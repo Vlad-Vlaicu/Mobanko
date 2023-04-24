@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "22252430877-u6jrh209ba7v135nqhf3u2bbkjkph2hn.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.mobanko",
+            "certificate_hash": "9ec239d373d05c1df28fd9719ce3ea94427c7630"
+          }
+        },
+        {
           "client_id": "22252430877-h5roiosve6shm0mqkgns8kc3jqbq50st.apps.googleusercontent.com",
           "client_type": 3
         }
