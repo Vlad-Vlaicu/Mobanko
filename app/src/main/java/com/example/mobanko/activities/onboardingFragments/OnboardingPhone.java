@@ -5,6 +5,7 @@ import static android.view.View.VISIBLE;
 
 import static androidx.core.content.ContextCompat.checkSelfPermission;
 
+import static com.example.mobanko.activities.factory.UserFactory.getUser;
 import static com.example.mobanko.entities.AccountType.CURRENT_ACCOUNT;
 import static com.example.mobanko.entities.CurrencyType.RON;
 import static com.example.mobanko.generators.IBANGenerator.generateIban;
@@ -13,6 +14,7 @@ import static com.example.mobanko.generators.PasswordGenerator.generatePassword;
 
 import static java.util.Collections.emptyList;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -69,27 +71,19 @@ import java.util.concurrent.TimeUnit;
 
 public class OnboardingPhone extends Fragment {
 
-    private static final int SEND_SMS_CODE = 1000;
-    FirebaseFirestore firebaseFirestore;
-
-    EditText phoneEditText;
-    EditText insertCode;
-    View view;
-    String mVerificationId;
-    PhoneAuthProvider.ForceResendingToken mResendToken;
-
-    TextView sendButton;
-    TextView sendButtonDisabled;
-
-    PhoneAuthCredential credential;
-
-    Bundle bundle;
-
+    private FirebaseFirestore firebaseFirestore;
+    private EditText phoneEditText;
+    private EditText insertCode;
+    private View view;
+    private String mVerificationId;
+    private PhoneAuthProvider.ForceResendingToken mResendToken;
+    private TextView sendButton;
+    private TextView sendButtonDisabled;
+    private PhoneAuthCredential credential;
+    private Bundle bundle;
     private OnboardingActivity mActivity;
-
     boolean messageSent = false;
-
-    String phoneNumber;
+    private String phoneNumber;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -155,7 +149,6 @@ public class OnboardingPhone extends Fragment {
             }
         });
 
-
         insertCode.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -190,8 +183,11 @@ public class OnboardingPhone extends Fragment {
                                     var list = queryDocumentSnapshots.getDocuments();
                                     String phoneText = phoneEditText.getText().toString();
                                     for (var d : list) {
+
                                         String phone = d.toString();
+
                                         if (phone.equals(phoneText)) {
+
                                             errorMessage.setVisibility(VISIBLE);
                                             return;
                                         }
@@ -200,9 +196,7 @@ public class OnboardingPhone extends Fragment {
                                     sendSmsOtp();
                                     phoneNumber = phoneText;
                                     return;
-
                                 }
-
                                 errorMessage.setVisibility(VISIBLE);
                             }
                         }).addOnFailureListener(new OnFailureListener() {
@@ -244,17 +238,20 @@ public class OnboardingPhone extends Fragment {
 
 
     private void sendSmsOtp() {
+
         String phoneNumber = "+4" + phoneEditText.getText().toString();
         System.out.println("PHONE NUMBER" + phoneNumber);
 
+        var builder = new AlertDialog.Builder(view.getContext());
+        builder.setTitle("Notificare")
+                .setMessage("Pentru a confirma că sunteți o persoană reală, vă vom redirecționa către o pagină web. " +
+                        "Vă rugăm să urmați instrucțiunile de pe acea pagină pentru a finaliza procesul")
+                .setCancelable(true)
+                .setPositiveButton("Ok", (dialogInterface, i) -> dialogInterface.cancel()).show();
 
-        String email = bundle.getString("userEmail");
-
-
-        // Activity (for callback binding)
         var callback = new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
             @Override
-            public void onVerificationCompleted(PhoneAuthCredential credential) {
+            public void onVerificationCompleted(@NonNull PhoneAuthCredential credential) {
                 // Auto-retrieval or instant verification is successful.
                 // Proceed with signing up.
                 System.out.println("Verification Completed");
@@ -271,34 +268,20 @@ public class OnboardingPhone extends Fragment {
             }
 
             @Override
-            public void onCodeSent(String verificationId,
-                                   PhoneAuthProvider.ForceResendingToken token) {
+            public void onCodeSent(@NonNull String verificationId,
+                                   @NonNull PhoneAuthProvider.ForceResendingToken token) {
                 // Code sent successfully. Save verification ID and token.
                 mVerificationId = verificationId;
                 mResendToken = token;
                 messageSent = true;
+                sendButton.setVisibility(GONE);
+                sendButtonDisabled.setVisibility(VISIBLE);
 
-                        /*
-                        sendButton.setVisibility(GONE);
-                        sendButtonDisabled.setVisibility(VISIBLE);
-                        new CountDownTimer(60000, 1000) {
-                            @Override
-                            public void onTick(long millisUntilFinished) {
-                                int secondsLeft = (int) (millisUntilFinished / 1000);
-                                sendButtonDisabled.setText(String.valueOf(secondsLeft));
-                            }
-
-                            @Override
-                            public void onFinish() {
-                                sendButton.setVisibility(VISIBLE);
-                                sendButtonDisabled.setVisibility(GONE);
-                                messageSent = false;
-                            }
-                        }.start();*/
             }
         };
 
         var user = FirebaseAuth.getInstance().getCurrentUser();
+
         user.getMultiFactor().getSession()
                 .addOnCompleteListener(
                         new OnCompleteListener<MultiFactorSession>() {
@@ -306,19 +289,12 @@ public class OnboardingPhone extends Fragment {
                             public void onComplete(@NonNull Task<MultiFactorSession> task) {
                                 if (task.isSuccessful()) {
                                     MultiFactorSession multiFactorSession = task.getResult();
-                                    PhoneAuthOptions phoneAuthOptions =
-                                            PhoneAuthOptions.newBuilder()
-                                                    .setPhoneNumber(phoneNumber)
-                                                    .setTimeout(30L, TimeUnit.SECONDS)
-                                                    .setMultiFactorSession(multiFactorSession)
-                                                    .setCallbacks(callback)
-                                                    .requireSmsValidation(true)
-                                                    .setActivity(mActivity)
-                                                    .build();
+                                    var phoneAuthOptions = buildPhoneOptions(multiFactorSession, callback);
 
-                                    GoogleApiAvailability api = GoogleApiAvailability.getInstance();
+                                    var api = GoogleApiAvailability.getInstance();
                                     int result = api.isGooglePlayServicesAvailable(getActivity());
                                     if (result == ConnectionResult.SUCCESS) {
+
                                         // SafetyNet API is available
                                         FirebaseApp.initializeApp(getActivity());
                                         FirebaseAppCheck firebaseAppCheck = FirebaseAppCheck.getInstance();
@@ -333,40 +309,31 @@ public class OnboardingPhone extends Fragment {
                                 }
                             }
                         });
-
     }
 
     void addUserData() {
         String userName = bundle.getString("userName");
         String email = bundle.getString("userEmail");
 
-        var userData = new User();
-        userData.setName(userName);
-        userData.setCreationDate(LocalDateTime.now());
-        userData.setEmail(email);
-        userData.setPhoneNumber(phoneNumber);
-        userData.setAccounts(new ArrayList<>());
         var userId = FirebaseAuth.getInstance().getUid();
-        userData.setId(userId);
-
-        var defaultAccount = new Account();
-        defaultAccount.setAccountHolderID(userId);
-        defaultAccount.setAccountType(CURRENT_ACCOUNT);
-        defaultAccount.setCurrencyType(RON);
-        defaultAccount.setBalance(500);
-        defaultAccount.setTransactions(emptyList());
-        defaultAccount.setCreationDate(LocalDateTime.now());
-        defaultAccount.setIBAN(generateIban("40", "BCRO", generateID(8)));
-        userData.getAccounts().add(defaultAccount);
+        var userData = getUser(userId, userName, email, phoneNumber);
+        var defaultAccount = userData.getAccounts().get(0);
 
         firebaseFirestore.collection("Users").document(userId).set(userData);
         firebaseFirestore.collection("Accounts").document(defaultAccount.getIBAN()).set(defaultAccount);
 
-        DocumentReference docRef = firebaseFirestore.collection("Phones").document();
+        var phoneDocRef = firebaseFirestore.collection("Phones").document(phoneNumber);
+        var emailDocRef = firebaseFirestore.collection("Emails").document(email);
 
-        docRef.set(new HashMap<String, Object>() {{
+        phoneDocRef.set(new HashMap<String, String>() {{
             put("phone", phoneNumber);
         }});
+
+        emailDocRef.set(new HashMap<String, String>() {{
+            put("email", email);
+        }});
+
+        sendChangePasswordEmail(email);
 
         // Create a new Intent for the target activity
         var intent = new Intent(getActivity(), MainActivity.class);
@@ -376,6 +343,24 @@ public class OnboardingPhone extends Fragment {
 
         // Start the target activity
         startActivity(intent);
+    }
+
+    PhoneAuthOptions buildPhoneOptions(MultiFactorSession multiFactorSession,
+                                       PhoneAuthProvider.OnVerificationStateChangedCallbacks callback) {
+        System.out.println("SENDING SMS TO +4" + phoneEditText.getText().toString());
+
+        return PhoneAuthOptions.newBuilder()
+                .setPhoneNumber("+4" + phoneEditText.getText().toString())
+                .setTimeout(30L, TimeUnit.SECONDS)
+                .setMultiFactorSession(multiFactorSession)
+                .setCallbacks(callback)
+                .requireSmsValidation(true)
+                .setActivity(mActivity)
+                .build();
+    }
+
+    void sendChangePasswordEmail(String email) {
+        FirebaseAuth.getInstance().sendPasswordResetEmail(email);
     }
 
 }

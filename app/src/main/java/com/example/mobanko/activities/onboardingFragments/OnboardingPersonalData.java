@@ -19,7 +19,6 @@ import com.example.mobanko.databinding.FragmentOnboardingPersonalDataBinding;
 
 
 public class OnboardingPersonalData extends Fragment {
-    FragmentOnboardingPersonalDataBinding binding;
     int permissionCounter;
 
     @Override
