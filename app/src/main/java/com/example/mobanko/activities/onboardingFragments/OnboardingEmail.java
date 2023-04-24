@@ -333,12 +333,6 @@ public class OnboardingEmail extends Fragment {
                             // Sign in success, update UI with the signed-in user's information
                             bundle.putString("userEmail", email);
 
-                            var nextFragment = new OnboardingPhone();
-                            nextFragment.setArguments(bundle);
-                            getFragmentManager().beginTransaction()
-                                    .replace(R.id.fragmentContainerView2, nextFragment)
-                                    .commit();
-
                         } else {
                             // If sign in fails, display a message to the user.
                             System.out.println("SIGN IN FAILED");
@@ -379,6 +373,12 @@ public class OnboardingEmail extends Fragment {
                                         awaitResponse(user);
 
                                         userLogin(email, password);
+
+                                        var nextFragment = new OnboardingPhone();
+                                        nextFragment.setArguments(bundle);
+                                        getFragmentManager().beginTransaction()
+                                                .replace(R.id.fragmentContainerView2, nextFragment)
+                                                .commit();
                                     }
                                 }
                             });

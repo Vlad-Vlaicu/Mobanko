@@ -32,6 +32,12 @@ public class LoginActivity extends AppCompatActivity {
         FirebaseAppCheck firebaseAppCheck = FirebaseAppCheck.getInstance();
         firebaseAppCheck.installAppCheckProviderFactory(PlayIntegrityAppCheckProviderFactory.getInstance());
 
+        var user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null) {
+
+
+        }
+
         binding.loginbutton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

@@ -335,14 +335,12 @@ public class OnboardingPhone extends Fragment {
 
         sendChangePasswordEmail(email);
 
-        // Create a new Intent for the target activity
-        var intent = new Intent(getActivity(), MainActivity.class);
+        var nextFragment = new OnboardingCongratulation();
 
-        // Set the appropriate flags to disable the back button
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        getFragmentManager().beginTransaction()
+                .replace(R.id.onboardingContainer, nextFragment)
+                .commit();
 
-        // Start the target activity
-        startActivity(intent);
     }
 
     PhoneAuthOptions buildPhoneOptions(MultiFactorSession multiFactorSession,
