@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -245,7 +246,7 @@ public class LoginActivity extends AppCompatActivity {
                                                     .setMultiFactorHint((PhoneMultiFactorInfo) selectedHint)
                                                     .setMultiFactorSession(multiFactorResolver.getSession())
                                                     .setCallbacks(callback)
-                                                    .setTimeout(30L, TimeUnit.SECONDS)
+                                                    .setTimeout(120L, TimeUnit.SECONDS)
                                                     .requireSmsValidation(true)
                                                     .build());
 
@@ -284,6 +285,7 @@ public class LoginActivity extends AppCompatActivity {
                                     num5 = (EditText) parentLayout.findViewById(R.id.editTextNumber5);
                                     num6 = (EditText) parentLayout.findViewById(R.id.editTextNumber6);
 
+                                    //auto refocus next element
                                     num1.addTextChangedListener(new TextWatcher() {
                                         @Override
                                         public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -393,6 +395,78 @@ public class LoginActivity extends AppCompatActivity {
                                         }
                                     });
 
+                                    //delete in series
+                                    num6.setOnKeyListener(new View.OnKeyListener() {
+                                        @Override
+                                        public boolean onKey(View view, int keyCode, KeyEvent keyEvent) {
+                                            if (keyCode == KeyEvent.KEYCODE_DEL && keyEvent.getAction() == KeyEvent.ACTION_UP) {
+                                                if (num6.getText().length() == 0 && num5.isEnabled()) {
+                                                    num5.setText("");
+                                                    num5.requestFocus();
+                                                    return true;
+                                                }
+                                            }
+                                            return false;
+                                        }
+                                    });
+
+                                    num5.setOnKeyListener(new View.OnKeyListener() {
+                                        @Override
+                                        public boolean onKey(View view, int keyCode, KeyEvent keyEvent) {
+                                            if (keyCode == KeyEvent.KEYCODE_DEL && keyEvent.getAction() == KeyEvent.ACTION_UP) {
+                                                if (num5.getText().length() == 0 && num4.isEnabled()) {
+                                                    num4.setText("");
+                                                    num4.requestFocus();
+                                                    return true;
+                                                }
+                                            }
+                                            return false;
+                                        }
+                                    });
+
+                                    num4.setOnKeyListener(new View.OnKeyListener() {
+                                        @Override
+                                        public boolean onKey(View view, int keyCode, KeyEvent keyEvent) {
+                                            if (keyCode == KeyEvent.KEYCODE_DEL && keyEvent.getAction() == KeyEvent.ACTION_UP) {
+                                                if (num4.getText().length() == 0 && num3.isEnabled()) {
+                                                    num3.setText("");
+                                                    num3.requestFocus();
+                                                    return true;
+                                                }
+                                            }
+                                            return false;
+                                        }
+                                    });
+
+                                    num3.setOnKeyListener(new View.OnKeyListener() {
+                                        @Override
+                                        public boolean onKey(View view, int keyCode, KeyEvent keyEvent) {
+                                            if (keyCode == KeyEvent.KEYCODE_DEL && keyEvent.getAction() == KeyEvent.ACTION_UP) {
+                                                if (num3.getText().length() == 0 && num2.isEnabled()) {
+                                                    num2.setText("");
+                                                    num2.requestFocus();
+                                                    return true;
+                                                }
+                                            }
+                                            return false;
+                                        }
+                                    });
+
+                                    num2.setOnKeyListener(new View.OnKeyListener() {
+                                        @Override
+                                        public boolean onKey(View view, int keyCode, KeyEvent keyEvent) {
+                                            if (keyCode == KeyEvent.KEYCODE_DEL && keyEvent.getAction() == KeyEvent.ACTION_UP) {
+                                                if (num2.getText().length() == 0 && num1.isEnabled()) {
+                                                    num1.setText("");
+                                                    num1.requestFocus();
+                                                    return true;
+                                                }
+                                            }
+                                            return false;
+                                        }
+                                    });
+
+
                                     continueButton.setOnClickListener(new View.OnClickListener() {
                                         @Override
                                         public void onClick(View view) {
@@ -419,8 +493,10 @@ public class LoginActivity extends AppCompatActivity {
                                             stringBuilder.append(num5.getText().toString());
                                             stringBuilder.append(num6.getText().toString());
 
+                                            System.out.println("insertedCode " + stringBuilder.toString());
+
                                             // Ask user for the SMS verification code.
-                                            if(stringBuilder.toString().length() == 6){
+                                            if(stringBuilder.toString().trim().length() == 6){
 
                                                 var credential =
                                                         PhoneAuthProvider.getCredential(mVerificationId,

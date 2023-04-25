@@ -349,7 +349,7 @@ public class OnboardingPhone extends Fragment {
 
         return PhoneAuthOptions.newBuilder()
                 .setPhoneNumber("+4" + phoneEditText.getText().toString())
-                .setTimeout(30L, TimeUnit.SECONDS)
+                .setTimeout(120L, TimeUnit.SECONDS)
                 .setMultiFactorSession(multiFactorSession)
                 .setCallbacks(callback)
                 .requireSmsValidation(true)
