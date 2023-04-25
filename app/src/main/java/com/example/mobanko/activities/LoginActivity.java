@@ -5,6 +5,7 @@ import static android.view.View.VISIBLE;
 import static androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_STRONG;
 import static androidx.biometric.BiometricManager.Authenticators.DEVICE_CREDENTIAL;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
@@ -266,9 +267,14 @@ public class LoginActivity extends AppCompatActivity {
                                     parentLayout.removeView(existingConstraintLayout);
                                     parentLayout.addView(newConstraintLayout);
 
-                                    //var layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-                                    //newConstraintLayout.setLayoutParams(layoutParams);
                                     newConstraintLayout.setConstraintSet(new ConstraintSet());
+
+                                    var builder = new AlertDialog.Builder(view.getContext());
+                                    builder.setTitle("Notificare")
+                                            .setMessage("Pentru a confirma că sunteți o persoană reală, vă vom redirecționa către o pagină web. " +
+                                                    "Vă rugăm să urmați instrucțiunile de pe acea pagină pentru a finaliza procesul")
+                                            .setCancelable(true)
+                                            .setPositiveButton("Ok", (dialogInterface, i) -> dialogInterface.cancel()).show();
 
                                     var continueButton = (Button) parentLayout.findViewById(R.id.verificareOTPButton);
                                     num1 = (EditText) parentLayout.findViewById(R.id.editTextNumber1);
@@ -368,12 +374,29 @@ public class LoginActivity extends AppCompatActivity {
 
                                         }
                                     });
+                                    num6.addTextChangedListener(new TextWatcher() {
+                                        @Override
+                                        public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
+                                        }
 
+                                        @Override
+                                        public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                                            if(!charSequence.toString().trim().isEmpty()){
+                                                continueButton.performClick();
+                                            }
+                                        }
+
+                                        @Override
+                                        public void afterTextChanged(Editable editable) {
+
+                                        }
+                                    });
 
                                     continueButton.setOnClickListener(new View.OnClickListener() {
                                         @Override
                                         public void onClick(View view) {
+
                                             var api = GoogleApiAvailability.getInstance();
                                             int result = api.isGooglePlayServicesAvailable(LoginActivity.this);
                                             if (result == ConnectionResult.SUCCESS) {
@@ -397,30 +420,35 @@ public class LoginActivity extends AppCompatActivity {
                                             stringBuilder.append(num6.getText().toString());
 
                                             // Ask user for the SMS verification code.
-                                            var credential =
-                                                    PhoneAuthProvider.getCredential(mVerificationId, stringBuilder.toString());
+                                            if(stringBuilder.toString().length() == 6){
 
-                                            // Initialize a MultiFactorAssertion object with the
-                                            // PhoneAuthCredential.
-                                            MultiFactorAssertion multiFactorAssertion =
-                                                    PhoneMultiFactorGenerator.getAssertion(credential);
+                                                var credential =
+                                                        PhoneAuthProvider.getCredential(mVerificationId,
+                                                                stringBuilder.toString());
 
-                                            // Complete sign-in.
-                                            multiFactorResolver
-                                                    .resolveSignIn(multiFactorAssertion)
-                                                    .addOnCompleteListener(
-                                                            new OnCompleteListener<AuthResult>() {
-                                                                @Override
-                                                                public void onComplete(@NonNull Task<AuthResult> task) {
-                                                                    if (task.isSuccessful()) {
-                                                                        // User successfully signed in with the
-                                                                        // second factor phone number.
-                                                                        startActivity(intent);
-                                                                        finish();
+                                                // Initialize a MultiFactorAssertion object with the
+                                                // PhoneAuthCredential.
+                                                MultiFactorAssertion multiFactorAssertion =
+                                                        PhoneMultiFactorGenerator.getAssertion(credential);
+
+                                                // Complete sign-in.
+                                                multiFactorResolver
+                                                        .resolveSignIn(multiFactorAssertion)
+                                                        .addOnCompleteListener(
+                                                                new OnCompleteListener<AuthResult>() {
+                                                                    @Override
+                                                                    public void onComplete(@NonNull Task<AuthResult> task) {
+                                                                        if (task.isSuccessful()) {
+                                                                            // User successfully signed in with the
+                                                                            // second factor phone number.
+                                                                            startActivity(intent);
+                                                                            finish();
+                                                                        }
+                                                                        // ...
                                                                     }
-                                                                    // ...
-                                                                }
-                                                            });
+                                                                });
+                                            }
+
                                         }
                                     });
 
