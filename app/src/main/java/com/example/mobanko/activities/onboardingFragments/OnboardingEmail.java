@@ -2,20 +2,12 @@ package com.example.mobanko.activities.onboardingFragments;
 
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
-
 import static com.example.mobanko.generators.PasswordGenerator.generatePassword;
 import static java.lang.Math.abs;
-import static java.lang.Math.toRadians;
-import static java.lang.Thread.sleep;
 
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-
-import android.os.CountDownTimer;
 import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -24,23 +16,19 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
 
 import com.example.mobanko.R;
-import com.example.mobanko.activities.LoginActivity;
 import com.example.mobanko.activities.OnboardingActivity;
-import com.example.mobanko.entities.User;
-import com.example.mobanko.ui.WaitingDialog;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.SignInMethodQueryResult;
 
-import java.util.List;
 import java.util.regex.Pattern;
 
 public class OnboardingEmail extends Fragment {
