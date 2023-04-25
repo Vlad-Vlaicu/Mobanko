@@ -21,6 +21,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.biometric.BiometricPrompt;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.core.content.ContextCompat;
 
 import com.example.mobanko.R;
@@ -255,11 +256,19 @@ public class LoginActivity extends AppCompatActivity {
 
                                     ConstraintLayout existingConstraintLayout = findViewById(R.id.loginContainer);
 
+                                    // Set the layout params
+                                    ViewGroup.LayoutParams layoutParams = new ViewGroup.LayoutParams(
+                                            ViewGroup.LayoutParams.MATCH_PARENT,
+                                            ViewGroup.LayoutParams.MATCH_PARENT
+                                    );
+                                    newConstraintLayout.setLayoutParams(layoutParams);
+
                                     parentLayout.removeView(existingConstraintLayout);
                                     parentLayout.addView(newConstraintLayout);
 
                                     //var layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
                                     //newConstraintLayout.setLayoutParams(layoutParams);
+                                    newConstraintLayout.setConstraintSet(new ConstraintSet());
 
                                     var continueButton = (Button) parentLayout.findViewById(R.id.verificareOTPButton);
                                     num1 = (EditText) parentLayout.findViewById(R.id.editTextNumber1);
