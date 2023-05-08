@@ -13,9 +13,16 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MoBanko">
         <activity
+            android:name=".activities.AmountTransferActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.ManualTransferActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.MoBankoTransfer" />
+        <activity
             android:name=".activities.TransferActivity"
-            android:theme="@style/Theme.MoBankoTransfer"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.MoBankoTransfer" />
         <activity
             android:name=".activities.WaitingScreen"
             android:screenOrientation="portrait" />

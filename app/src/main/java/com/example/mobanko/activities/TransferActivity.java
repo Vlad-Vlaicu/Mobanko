@@ -2,6 +2,8 @@ package com.example.mobanko.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.app.ActivityCompat;
+import androidx.core.app.ActivityOptionsCompat;
 
 import android.animation.ArgbEvaluator;
 import android.animation.ValueAnimator;
@@ -12,6 +14,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -44,14 +47,24 @@ public class TransferActivity extends AppCompatActivity {
         ConstraintLayout scanPayZone = binding.getRoot().findViewById(R.id.scanPayZone);
         ConstraintLayout templatesZone = binding.getRoot().findViewById(R.id.templatesZone);
         ConstraintLayout billPaymentsZone = binding.getRoot().findViewById(R.id.billPaymentsZone);
+        ImageView returnImage = binding.getRoot().findViewById(R.id.imageView10);
+        TextView returnText = binding.getRoot().findViewById(R.id.textView27);
+
+        returnImage.setOnClickListener(view -> finish());
+        returnText.setOnClickListener(view -> finish());
 
 
         manualTransferZone.setOnTouchListener((v, event) -> {
             int action = event.getAction();
             switch (action) {
                 case MotionEvent.ACTION_DOWN:
-                    //TODO: manualTransferActivity
-                    Toast.makeText(this, "manual", Toast.LENGTH_SHORT).show();
+                    Intent newIntent = new Intent(this, ManualTransferActivity.class);
+                    newIntent.putExtra("userInfo", userInfo);
+                    newIntent.putExtra("accountId", accountId);
+
+                    ActivityOptionsCompat options = ActivityOptionsCompat.makeCustomAnimation(
+                            this, R.anim.slide_in_from_right, R.anim.slide_out_to_right);
+                    ActivityCompat.startActivity(this, newIntent, options.toBundle());
                     break;
             }
             return false;
