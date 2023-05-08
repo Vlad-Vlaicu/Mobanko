@@ -318,6 +318,7 @@ public class OnboardingPhone extends Fragment {
         var userId = FirebaseAuth.getInstance().getUid();
         var userData = getUser(userId, userName, email, phoneNumber);
         var defaultAccount = userData.getAccounts().get(0);
+        mActivity.setUserInfo(userData);
 
         firebaseFirestore.collection("Users").document(userId).set(userData);
         firebaseFirestore.collection("Accounts").document(defaultAccount.getIBAN()).set(defaultAccount);

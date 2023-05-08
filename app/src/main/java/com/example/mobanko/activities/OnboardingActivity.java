@@ -13,6 +13,7 @@ import com.example.mobanko.entities.User;
 public class OnboardingActivity extends AppCompatActivity {
 
     private ActivityOnboardingBinding binding;
+    private User userInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,5 +26,13 @@ public class OnboardingActivity extends AppCompatActivity {
                 .add(binding.fragmentContainerView2.getId(),
                         OnboardingPersonalData.class, null)
                 .commit();
+    }
+
+    public User getUserInfo() {
+        return userInfo;
+    }
+
+    public void setUserInfo(User userInfo) {
+        this.userInfo = userInfo;
     }
 }

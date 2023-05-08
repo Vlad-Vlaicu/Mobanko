@@ -56,6 +56,7 @@ public class OnboardingCongratulation extends Fragment {
 
         // Set the appropriate flags to disable the back button
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        intent.putExtra("userInfo", mActivity.getUserInfo());
 
         Handler mHandler = new Handler();
         var runnable = new Runnable() {
