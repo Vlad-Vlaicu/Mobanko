@@ -7,11 +7,11 @@
     android:background="@color/dirty_white"
     tools:context=".activities.MainActivity">
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/main_action_bar"
         android:layout_width="match_parent"
         android:background="@color/primary_color"
-        android:layout_height="80dp"
+        android:layout_height="65dp"
         android:orientation="horizontal"
         android:gravity="center"
         app:layout_constraintEnd_toEndOf="parent"
@@ -22,24 +22,33 @@
             android:id="@+id/textView19"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
             android:layout_weight="1"
-            android:textColor="@color/white"
-            android:paddingStart="13dp"
-            android:textSize="18sp"
             android:fontFamily="@font/mainfonttitle"
+            android:paddingStart="13dp"
+            android:text="Overview"
+            android:textColor="@color/white"
+            android:textSize="15sp"
             android:textStyle="bold"
-            android:text="Overview" />
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.61" />
 
-        <TextView
+        <ImageView
             android:id="@+id/textView20"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_margin="8dp"
             android:layout_weight="1"
             android:gravity="end"
-            android:paddingEnd="10dp"
+            android:src="@mipmap/icon_person"
             android:textColor="@color/white"
-            android:text="Profile" />
-    </LinearLayout>
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.8" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 
     <androidx.fragment.app.FragmentContainerView
@@ -54,16 +63,60 @@
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/main_action_bar"
-        app:layout_constraintVertical_bias="0.059"
+        app:layout_constraintVertical_bias="0.0"
         tools:layout="@layout/fragment_overview" />
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/footBar"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:orientation="horizontal"
+        android:layout_height="80dp"
         android:background="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"></LinearLayout>
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent">
+
+
+        <ImageView
+            android:id="@+id/imageView7"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="4dp"
+            android:layout_weight="1"
+            android:background="@android:color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@mipmap/overview_focus" />
+
+        <ImageView
+            android:id="@+id/imageView8"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="4dp"
+            android:layout_weight="1"
+            android:background="@android:color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/imageView9"
+            app:layout_constraintStart_toEndOf="@+id/imageView7"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@mipmap/store_unfocus" />
+
+        <ImageView
+            android:id="@+id/imageView9"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="32dp"
+            android:layout_marginBottom="4dp"
+            android:layout_weight="1"
+            android:background="@android:color/white"
+            android:src="@mipmap/contact_unfocus"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
