@@ -5,11 +5,12 @@ import static android.view.View.VISIBLE;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.app.ActivityOptionsCompat;
 
 import com.example.mobanko.R;
 import com.example.mobanko.activities.homeFragments.ContactFragment;
@@ -17,13 +18,9 @@ import com.example.mobanko.activities.homeFragments.OverviewFragment;
 import com.example.mobanko.activities.homeFragments.StoreFragment;
 import com.example.mobanko.databinding.ActivityMainBinding;
 import com.example.mobanko.entities.User;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.FirebaseFirestore;
 
 public class MainActivity extends AppCompatActivity {
 
-    FirebaseAuth firebaseAuth;
-    FirebaseFirestore firebaseFirestore;
     User userInfo;
     private ActivityMainBinding binding;
 
@@ -130,6 +127,17 @@ public class MainActivity extends AppCompatActivity {
             default -> {
             }
         }
+    }
+
+    public void startNewTransfer(int accountId) {
+        Intent intent = new Intent(this, TransferActivity.class);
+        intent.putExtra("userInfo", userInfo);
+        intent.putExtra("accountId", accountId);
+
+        ActivityOptionsCompat options = ActivityOptionsCompat.makeCustomAnimation(
+                this, R.anim.slide_in_from_right, R.anim.slide_out_to_right);
+        ActivityCompat.startActivity(this, intent, options.toBundle());
+
     }
 
 }

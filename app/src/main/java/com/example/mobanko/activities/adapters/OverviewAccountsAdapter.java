@@ -2,35 +2,43 @@ package com.example.mobanko.activities.adapters;
 
 import static com.example.mobanko.entities.AccountType.getAccountTypeString;
 import static com.example.mobanko.entities.CurrencyType.getCurrencyString;
-
 import static java.lang.Math.floor;
 import static java.lang.Math.round;
-import static java.lang.String.valueOf;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.mobanko.R;
+import com.example.mobanko.activities.MainActivity;
+import com.example.mobanko.activities.TransferActivity;
 import com.example.mobanko.entities.Account;
-import com.example.mobanko.entities.AccountType;
-import com.example.mobanko.entities.CurrencyType;
+import com.example.mobanko.entities.User;
 
 import java.util.List;
 
 public class OverviewAccountsAdapter extends RecyclerView.Adapter<OverviewAccountsAdapter.MyViewHolder> {
 
-    private Context context;
+    Context context;
     private List<Account> accountList;
 
-    public OverviewAccountsAdapter(Context context, List<Account> accountList) {
+    private static MainActivity mainActivity;
+
+    private User userInfo;
+
+    public OverviewAccountsAdapter(Context context, MainActivity mainActivity) {
+        this.userInfo = mainActivity.getUserInfo();
         this.context = context;
-        this.accountList = accountList;
+        this.accountList = userInfo.getAccounts();
+        this.mainActivity = mainActivity;
     }
 
     @NonNull
@@ -61,6 +69,7 @@ public class OverviewAccountsAdapter extends RecyclerView.Adapter<OverviewAccoun
         holder.decimalPartBalance.setText(decimalBalance);
 
         holder.currencyType.setText(getCurrencyString(currentAccount.getCurrencyType()));
+
     }
 
     @Override
@@ -83,6 +92,13 @@ public class OverviewAccountsAdapter extends RecyclerView.Adapter<OverviewAccoun
             decimalPartBalance = (TextView) itemView.findViewById(R.id.textView24);
             currencyType = (TextView) itemView.findViewById(R.id.textView25);
             newTransfer = (TextView) itemView.findViewById(R.id.textView26);
+
+            newTransfer.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    mainActivity.startNewTransfer(getAdapterPosition());
+                }
+            });
 
         }
     }

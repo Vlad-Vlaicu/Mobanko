@@ -17,6 +17,7 @@ import com.example.mobanko.R;
 import com.example.mobanko.activities.MainActivity;
 import com.example.mobanko.activities.OnboardingActivity;
 import com.example.mobanko.activities.adapters.OverviewAccountsAdapter;
+import com.example.mobanko.databinding.ActivityTransferBinding;
 import com.example.mobanko.entities.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -59,11 +60,9 @@ public class OverviewFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_overview, container, false);
 
-        userInfo = mActivity.getUserInfo();
-
         var recycleView = (RecyclerView) view.findViewById(R.id.overviewAccountsRecycleView);
 
-        var adapter = new OverviewAccountsAdapter(view.getContext(), userInfo.getAccounts());
+        var adapter = new OverviewAccountsAdapter(view.getContext(), mActivity);
         recycleView.setAdapter(adapter);
         recycleView.setLayoutManager(new LinearLayoutManager(view.getContext()));
 
