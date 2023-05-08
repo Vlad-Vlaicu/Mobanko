@@ -14,7 +14,7 @@
         android:theme="@style/Theme.MoBanko">
         <activity
             android:name=".activities.TransferActivity"
-            android:theme="@style/Theme.MoBanko"
+            android:theme="@style/Theme.MoBankoTransfer"
             android:screenOrientation="portrait" />
         <activity
             android:name=".activities.WaitingScreen"
