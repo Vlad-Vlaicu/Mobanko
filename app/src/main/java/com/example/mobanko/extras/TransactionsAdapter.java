@@ -1,5 +1,7 @@
 package com.example.mobanko.extras;
 
+import static com.example.mobanko.entities.CurrencyType.getCurrencyString;
+
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +14,8 @@ import com.example.mobanko.entities.CurrencyType;
 import com.example.mobanko.entities.Transaction;
 import com.example.mobanko.entities.User;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 import androidx.annotation.NonNull;
@@ -67,10 +71,15 @@ public class TransactionsAdapter extends RecyclerView.Adapter<TransactionsAdapte
             EditText payment_note_txt = itemView.findViewById(R.id.pay_note_txt);
 
             suma_txt.append(transaction.getBalance().toString());
-            currency_transaction_txt.append(CurrencyType.getCurrencyString(transaction.getCurrencyType()));
-            data_transaction_txt.append(transaction.getDateOfTransaction().getDayOfMonth() + "/" +
-                    transaction.getDateOfTransaction().getMonth() + "/" +
-                    transaction.getDateOfTransaction().getYear());
+            currency_transaction_txt.append(getCurrencyString(transaction.getCurrencyType()));
+
+            var formatter = DateTimeFormatter.ISO_LOCAL_DATE_TIME;
+            var transactionDate = LocalDateTime.parse(transaction.getDateOfTransaction(), formatter);
+
+
+            data_transaction_txt.append(transactionDate.getDayOfMonth() + "/" +
+                    transactionDate.getMonth() + "/" +
+                    transactionDate.getYear());
             beneficiar_txt.append(User.getUserById(transaction.getSenderID().toString()).getName());
             payment_note_txt.append(transaction.getPaymentNote());
         }

@@ -13,7 +13,7 @@ public class UserFactory {
         var userData = new User();
         userData.setId(userId);
         userData.setName(name);
-        userData.setCreationDate(LocalDateTime.now());
+        userData.setCreationDate(LocalDateTime.now().toString());
         userData.setEmail(email);
         userData.setPhoneNumber(phone);
         userData.setAccounts(new ArrayList<>());

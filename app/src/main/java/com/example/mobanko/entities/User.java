@@ -18,8 +18,8 @@ public class User implements Serializable {
     private String email;
     private String phoneNumber;
     private ArrayList<Account> accounts;
-    private LocalDateTime creationDate;
-    private LocalDateTime accountValidatedDate;
+    private String creationDate;
+    private String accountValidatedDate;
 
     // TODO
     public static User getUserById(final String id) {

@@ -1,6 +1,5 @@
 package com.example.mobanko.entities;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 import lombok.Data;
@@ -16,5 +15,5 @@ public class Account {
     private String accountHolderID;
     private CurrencyType currencyType;
     private List<Transaction> transactions;
-    private LocalDateTime creationDate;
+    private String creationDate;
 }

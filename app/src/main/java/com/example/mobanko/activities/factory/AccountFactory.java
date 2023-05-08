@@ -20,7 +20,7 @@ public class AccountFactory {
         defaultAccount.setCurrencyType(RON);
         defaultAccount.setBalance(500);
         defaultAccount.setTransactions(emptyList());
-        defaultAccount.setCreationDate(LocalDateTime.now());
+        defaultAccount.setCreationDate(LocalDateTime.now().toString());
         defaultAccount.setIBAN(generateIban("40", "BCRO", generateID(8)));
         defaultAccount.setTransactions(new ArrayList<>());
         return defaultAccount;
