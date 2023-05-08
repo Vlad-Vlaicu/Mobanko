@@ -58,30 +58,14 @@ public class OverviewFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_overview, container, false);
-        var user = FirebaseAuth.getInstance().getCurrentUser();
 
-        var firebaseFirestore = FirebaseFirestore.getInstance();
-
-        var docRef = firebaseFirestore.collection("Users").document(user.getUid());
+        userInfo = mActivity.getUserInfo();
 
         var recycleView = (RecyclerView) view.findViewById(R.id.overviewAccountsRecycleView);
 
-        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()) {
-                    DocumentSnapshot document = task.getResult();
-                    if (document.exists()) {
-                        userInfo = document.toObject(User.class);
-                        var adapter = new OverviewAccountsAdapter(view.getContext(), userInfo.getAccounts());
-                        recycleView.setAdapter(adapter);
-                        recycleView.setLayoutManager(new LinearLayoutManager(view.getContext()));
-                    }
-                } else {
-                    Toast.makeText(view.getContext(), "There was a problem getting data. Please check your internet connection!", Toast.LENGTH_LONG);
-                }
-            }
-        });
+        var adapter = new OverviewAccountsAdapter(view.getContext(), userInfo.getAccounts());
+        recycleView.setAdapter(adapter);
+        recycleView.setLayoutManager(new LinearLayoutManager(view.getContext()));
 
         return view;
     }

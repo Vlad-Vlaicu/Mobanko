@@ -108,7 +108,7 @@ public class LoginActivity extends AppCompatActivity {
                         @Override
                         public void onAuthenticationSucceeded(@NonNull androidx.biometric.BiometricPrompt.AuthenticationResult result) {
                             super.onAuthenticationSucceeded(result);
-                            var intent = new Intent(LoginActivity.this, MainActivity.class);
+                            var intent = new Intent(LoginActivity.this, WaitingScreen.class);
                             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
 
                             startActivity(intent);
@@ -177,7 +177,7 @@ public class LoginActivity extends AppCompatActivity {
             return;
         }
 
-        var intent = new Intent(this, MainActivity.class);
+        var intent = new Intent(this, WaitingScreen.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
 
         var callback = new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {

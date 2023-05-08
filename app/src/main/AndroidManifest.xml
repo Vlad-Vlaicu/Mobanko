@@ -12,8 +12,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MoBanko">
-        <activity android:name=".activities.OnboardingActivity"
-            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".activities.WaitingScreen"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activities.OnboardingActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activities.MainActivity"
             android:screenOrientation="portrait" />
