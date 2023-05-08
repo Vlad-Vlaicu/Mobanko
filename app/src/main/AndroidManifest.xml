@@ -14,7 +14,8 @@
         android:theme="@style/Theme.MoBanko">
         <activity
             android:name=".activities.AmountTransferActivity"
-            android:exported="false" />
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.MoBankoTransfer" />
         <activity
             android:name=".activities.ManualTransferActivity"
             android:screenOrientation="portrait"

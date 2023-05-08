@@ -6,4 +6,127 @@
     android:layout_height="match_parent"
     tools:context=".activities.AmountTransferActivity">
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/amount_action_bar"
+        android:layout_width="match_parent"
+        android:background="@color/transfer_background"
+        android:layout_height="65dp"
+        android:orientation="horizontal"
+        android:gravity="center"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/amount_action_bar_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:fontFamily="@font/mainfonttitle"
+            android:paddingEnd="20dp"
+            android:paddingStart="16dp"
+            android:paddingTop="16dp"
+            android:paddingBottom="16dp"
+            android:text="Amount"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/amount_return_image"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.53" />
+
+        <ImageView
+            android:id="@+id/amount_return_image"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_margin="8dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:src="@mipmap/transfer_back_arrow"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.575" />
+
+        <TextView
+            android:id="@+id/amountNextFocused"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:text="Next"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            android:padding="12dp"
+            android:textStyle="bold"
+            android:visibility="gone"
+            android:fontFamily="@font/mainfonttext"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/amountNextUnfocused"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:text="Next"
+            android:visibility="visible"
+            android:textColor="@color/light_gray"
+            android:textSize="16sp"
+            android:padding="12dp"
+            android:fontFamily="@font/mainfonttext"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <EditText
+        android:id="@+id/amountEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="124dp"
+        android:ems="10"
+        android:focusedByDefault="true"
+        android:inputType="number"
+        android:gravity="center"
+        android:textSize="50dp"
+        android:maxLength="8"
+        android:hint="  0"
+        android:textStyle="bold"
+        android:textColor="@color/textColor1"
+        android:backgroundTint="@color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/amount_action_bar" />
+
+    <TextView
+        android:id="@+id/warning_amount_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="You are exceeding your available amount."
+        android:textColor="@color/textColor2"
+        android:textSize="16sp"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.492"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/amountEditText" />
+
+    <TextView
+        android:id="@+id/available_amount_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Your available amount is 138.46 RON"
+        android:textColor="@color/textColor1"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/warning_amount_textview" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

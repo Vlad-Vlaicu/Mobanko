@@ -124,8 +124,8 @@ public class ManualTransferActivity extends AppCompatActivity {
                                                 DocumentSnapshot receiverDocument = task.getResult();
                                                 if (receiverDocument.exists()) {
                                                     User receiverInfo = receiverDocument.toObject(User.class);
-                                                    intent.putExtra("receiverInfo", receiverInfo);
-                                                    intent.putExtra("receiverAccount", accountInfo);
+                                                    newIntent.putExtra("receiverInfo", receiverInfo);
+                                                    newIntent.putExtra("receiverAccount", accountInfo);
 
                                                     ActivityCompat.startActivity(binding.getRoot().getContext(), newIntent, options.toBundle());
                                                 }
@@ -133,7 +133,6 @@ public class ManualTransferActivity extends AppCompatActivity {
                                                 Toast.makeText(binding.getRoot().getContext(), "There was a problem getting data. Please check your internet connection!", Toast.LENGTH_LONG).show();
 
                                             }
-
                                         }
                                     });
 
