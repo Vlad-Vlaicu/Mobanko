@@ -1,0 +1,142 @@
+package com.example.mobanko.activities;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import com.example.mobanko.R;
+import com.example.mobanko.databinding.ActivitySignTransferBinding;
+import com.example.mobanko.entities.Account;
+import com.example.mobanko.entities.User;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.Transaction;
+
+import java.util.Objects;
+
+
+public class SignTransferActivity extends AppCompatActivity {
+
+    ActivitySignTransferBinding binding;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        binding = ActivitySignTransferBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+
+        Intent intent = getIntent();
+
+        User userInfo = (User) intent.getSerializableExtra("userInfo");
+        int accountId = intent.getIntExtra("accountId", -1);
+        User receiverUser = (User) intent.getSerializableExtra("receiverInfo");
+        Account receiverAccount = (Account) intent.getSerializableExtra("receiverAccount");
+        double amountValue = intent.getDoubleExtra("amount", 0);
+
+        Intent nextIntent = new Intent(this, WaitingScreen.class);
+
+
+        TextView recipientName = (TextView) binding.getRoot().findViewById(R.id.textView29);
+        TextView iban = (TextView) binding.getRoot().findViewById(R.id.textView31);
+        TextView amount = (TextView) binding.getRoot().findViewById(R.id.textView33);
+        TextView totalAmount = (TextView) binding.getRoot().findViewById(R.id.textView35);
+        TextView returnText = (TextView) binding.getRoot().findViewById(R.id.textView27);
+        ImageView returnImage = (ImageView) binding.getRoot().findViewById(R.id.sign_transfer_return_image);
+        TextView signButton = (TextView) binding.getRoot().findViewById(R.id.signButton);
+
+        returnImage.setOnClickListener(view -> finish());
+   //     returnText.setOnClickListener(view -> finish());
+
+        recipientName.setText(receiverUser.getName().toUpperCase());
+        iban.setText(receiverAccount.getIBAN().toUpperCase());
+        amount.setText(amountValue + " RON");
+        totalAmount.setText(amountValue + " RON");
+
+        signButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FirebaseFirestore db = FirebaseFirestore.getInstance();
+                DocumentReference receiverAccountRef = db.collection("Accounts").document(receiverAccount.getIBAN());
+                DocumentReference receiverUserRef = db.collection("Users").document(receiverUser.getId());
+                DocumentReference senderAccountRef = db.collection("Accounts").document(userInfo.getAccounts().get(accountId).getIBAN());
+                DocumentReference senderUserRef = db.collection("Users").document(userInfo.getId());
+
+                db.runTransaction(new Transaction.Function<Void>() {
+                            @Override
+                            public Void apply(@NonNull Transaction transaction) throws FirebaseFirestoreException {
+                                DocumentSnapshot receiverAccountSnap = transaction.get(receiverAccountRef);
+                                DocumentSnapshot receiverUserSnap = transaction.get(receiverUserRef);
+                                DocumentSnapshot senderAccountSnap = transaction.get(senderAccountRef);
+                                DocumentSnapshot senderUserSnap = transaction.get(senderUserRef);
+
+                                double receiverBalance = receiverAccountSnap.getDouble("balance") + amountValue;
+                                double senderBalance = senderAccountSnap.getDouble("balance") - amountValue;
+
+                                // Update the balance in the transaction
+                                transaction.update(receiverAccountRef, "balance", receiverBalance);
+                                transaction.update(senderAccountRef, "balance", senderBalance);
+
+                                User receiverUser = receiverUserSnap.toObject(User.class);
+                                User senderUser = senderUserSnap.toObject(User.class);
+                                Account receiverAccount = receiverAccountSnap.toObject(Account.class);
+                                Account senderAccount = senderAccountSnap.toObject(Account.class);
+
+
+                                receiverUser.getAccounts().forEach(account -> {
+                                    if (Objects.equals(account.getIBAN(), receiverAccount.getIBAN())){
+                                        double currentBalance = account.getBalance();
+                                        account.setBalance(currentBalance + amountValue);
+                                    }
+                                });
+
+                                senderUser.getAccounts().forEach(account -> {
+                                    if (Objects.equals(account.getIBAN(), senderAccount.getIBAN())){
+                                        double currentBalance = account.getBalance();
+                                        account.setBalance(currentBalance - amountValue);
+                                    }
+                                });
+
+                                transaction.set(receiverUserRef, receiverUser);
+                                transaction.set(senderUserRef, senderUser);
+
+                                return null;
+                            }
+                        })
+                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                // The transaction was successfully completed.
+                                // Handle the success case, if required.
+                                System.out.println("SUCCESS\n");
+                                startActivity(nextIntent);
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                // The transaction failed.
+                                // Handle the failure case, if required.
+                                System.out.println("FAIL " + e.getMessage());
+                                startActivity(nextIntent);
+
+                            }
+                        });
+
+
+
+            }
+        });
+
+
+    }
+}

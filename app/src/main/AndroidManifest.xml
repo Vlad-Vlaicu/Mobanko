@@ -13,6 +13,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MoBanko">
         <activity
+            android:name=".activities.SignTransferActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.MoBankoTransfer" />
+        <activity
             android:name=".activities.AmountTransferActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.MoBankoTransfer" />

@@ -227,7 +227,8 @@ public class LoginActivity extends AppCompatActivity {
                                     // User is not enrolled with a second factor and is successfully
                                     // signed in.
                                     // ...
-                                    return;
+                                    startActivity(intent);
+                                    finish();
                                 }
                                 if (task.getException() instanceof FirebaseAuthMultiFactorException) {
                                     FirebaseAuthMultiFactorException e =

@@ -175,6 +175,11 @@ public class OnboardingPhone extends Fragment {
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                phoneNumber = phoneEditText.getText().toString();
+                addUserData();
+
+                /*
                 firebaseFirestore.collection("Phones")
                         .get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                             @Override
@@ -205,6 +210,8 @@ public class OnboardingPhone extends Fragment {
                                 errorMessage.setVisibility(VISIBLE);
                             }
                         });
+
+                 */
             }
         });
 

@@ -5,6 +5,8 @@ import static android.view.View.VISIBLE;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.app.ActivityOptionsCompat;
 
 import android.content.Context;
 import android.content.Intent;
@@ -41,6 +43,15 @@ public class AmountTransferActivity extends AppCompatActivity {
         int accountId = intent.getIntExtra("accountId", -1);
         User receiverUser = (User) intent.getSerializableExtra("receiverInfo");
         Account receiverAccount = (Account) intent.getSerializableExtra("receiverAccount");
+
+        Intent nextIntent = new Intent(this, SignTransferActivity.class);
+        nextIntent.putExtra("userInfo", userInfo);
+        nextIntent.putExtra("accountId", accountId);
+        nextIntent.putExtra("receiverInfo", receiverUser);
+        nextIntent.putExtra("receiverAccount", receiverAccount);
+
+        ActivityOptionsCompat options = ActivityOptionsCompat.makeCustomAnimation(
+                this, R.anim.slide_in_from_right, R.anim.slide_out_to_right);
 
         TextView returnTextView = (TextView) binding.getRoot().findViewById(R.id.amount_action_bar_text);
         ImageView returnImageView = (ImageView) binding.getRoot().findViewById(R.id.amount_return_image);
@@ -104,7 +115,9 @@ public class AmountTransferActivity extends AppCompatActivity {
         amountNextFocused.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                Double amount = Double.parseDouble(amountEditText.getText().toString());
+                nextIntent.putExtra("amount", amount);
+                ActivityCompat.startActivity(binding.getRoot().getContext(), nextIntent, options.toBundle());
             }
         });
 
