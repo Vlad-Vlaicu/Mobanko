@@ -70,6 +70,7 @@ public class OverviewAccountsAdapter extends RecyclerView.Adapter<OverviewAccoun
 
         holder.currencyType.setText(getCurrencyString(currentAccount.getCurrencyType()));
 
+
     }
 
     @Override
@@ -85,6 +86,8 @@ public class OverviewAccountsAdapter extends RecyclerView.Adapter<OverviewAccoun
         TextView currencyType;
         TextView newTransfer;
 
+        View infoView;
+
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
             accountType = (TextView) itemView.findViewById(R.id.textView22);
@@ -92,13 +95,12 @@ public class OverviewAccountsAdapter extends RecyclerView.Adapter<OverviewAccoun
             decimalPartBalance = (TextView) itemView.findViewById(R.id.textView24);
             currencyType = (TextView) itemView.findViewById(R.id.textView25);
             newTransfer = (TextView) itemView.findViewById(R.id.textView26);
+            infoView = itemView.findViewById(R.id.account_layout_info);
 
-            newTransfer.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    mainActivity.startNewTransfer(getAdapterPosition());
-                }
-            });
+
+            newTransfer.setOnClickListener(view -> mainActivity.startNewTransfer(getAdapterPosition()));
+
+            infoView.setOnClickListener(view -> mainActivity.getAccountInfo(getAdapterPosition()));
 
         }
     }

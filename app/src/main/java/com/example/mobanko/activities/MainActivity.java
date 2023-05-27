@@ -140,4 +140,14 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    public void getAccountInfo(int accountId) {
+        Intent intent = new Intent(this, AccountInfoActivity.class);
+        intent.putExtra("userInfo", userInfo);
+        intent.putExtra("accountId", accountId);
+
+        ActivityOptionsCompat options = ActivityOptionsCompat.makeCustomAnimation(
+                this, R.anim.slide_in_from_right, R.anim.slide_out_to_right);
+        ActivityCompat.startActivity(this, intent, options.toBundle());
+    }
+
 }

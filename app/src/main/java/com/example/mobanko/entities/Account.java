@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Account implements Serializable {
 
+    private String name = "Current Account";
     private String IBAN;
     private AccountType accountType;
     private double balance;
