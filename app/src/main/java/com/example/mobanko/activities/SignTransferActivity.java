@@ -3,6 +3,7 @@ package com.example.mobanko.activities;
 import static com.example.mobanko.entities.Categories.UNCATEGORIZED_EXPENSES;
 import static com.example.mobanko.entities.Categories.UNCATEGORIZED_INCOME;
 import static com.example.mobanko.entities.CurrencyType.RON;
+import static com.example.mobanko.entities.PaymentType.INTRABANK;
 import static com.example.mobanko.entities.Subcategories.OTHER_INCOME;
 import static com.example.mobanko.entities.Subcategories.UNCATEGORIZED;
 import static java.time.LocalDateTime.now;
@@ -108,6 +109,9 @@ public class SignTransferActivity extends AppCompatActivity {
                                 receiverTransaction.setID(UUID.randomUUID().toString());
                                 receiverTransaction.setCategories(UNCATEGORIZED_INCOME);
                                 receiverTransaction.setSubcategories(OTHER_INCOME);
+                                receiverTransaction.setRecipientName(receiverUser.getName());
+                                receiverTransaction.setSenderName(senderUser.getName());
+                                receiverTransaction.setPaymentType(INTRABANK);
 
                                 com.example.mobanko.entities.Transaction senderTransaction = new com.example.mobanko.entities.Transaction();
                                 senderTransaction.setBalance(amountValue);
@@ -118,6 +122,9 @@ public class SignTransferActivity extends AppCompatActivity {
                                 senderTransaction.setID(UUID.randomUUID().toString());
                                 senderTransaction.setCategories(UNCATEGORIZED_EXPENSES);
                                 senderTransaction.setSubcategories(UNCATEGORIZED);
+                                senderTransaction.setRecipientName(receiverUser.getName());
+                                senderTransaction.setSenderName(senderUser.getName());
+                                senderTransaction.setPaymentType(INTRABANK);
 
 
                                 receiverUser.getAccounts().forEach(account -> {

@@ -20,4 +20,5 @@
     <color name="text_dark_blue">#061b50</color>
     <color name="tint_light_gray">#e2e3e5</color>
     <color name="transfer_background">#e1015a</color>
+    <color name="dark_gray">#757575</color>
 </resources>

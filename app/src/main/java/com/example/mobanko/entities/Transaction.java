@@ -13,7 +13,9 @@ public class Transaction implements Serializable {
 
     private String ID;
     private String recipientID;
+    private String recipientName;
     private String senderID;
+    private String senderName;
     private Double balance;
     private CurrencyType currencyType;
     private String dateOfTransaction;
