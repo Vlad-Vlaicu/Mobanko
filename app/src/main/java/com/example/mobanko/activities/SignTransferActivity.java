@@ -1,5 +1,12 @@
 package com.example.mobanko.activities;
 
+import static com.example.mobanko.entities.Categories.UNCATEGORIZED_EXPENSES;
+import static com.example.mobanko.entities.Categories.UNCATEGORIZED_INCOME;
+import static com.example.mobanko.entities.CurrencyType.RON;
+import static com.example.mobanko.entities.Subcategories.OTHER_INCOME;
+import static com.example.mobanko.entities.Subcategories.UNCATEGORIZED;
+import static java.time.LocalDateTime.now;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -22,6 +29,7 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Transaction;
 
 import java.util.Objects;
+import java.util.UUID;
 
 
 public class SignTransferActivity extends AppCompatActivity {
@@ -91,11 +99,32 @@ public class SignTransferActivity extends AppCompatActivity {
                                 Account receiverAccount = receiverAccountSnap.toObject(Account.class);
                                 Account senderAccount = senderAccountSnap.toObject(Account.class);
 
+                                com.example.mobanko.entities.Transaction receiverTransaction = new com.example.mobanko.entities.Transaction();
+                                receiverTransaction.setBalance(amountValue);
+                                receiverTransaction.setRecipientID(receiverAccount.getIBAN());
+                                receiverTransaction.setSenderID(senderAccount.getIBAN());
+                                receiverTransaction.setDateOfTransaction(now().toString());
+                                receiverTransaction.setCurrencyType(RON);
+                                receiverTransaction.setID(UUID.randomUUID().toString());
+                                receiverTransaction.setCategories(UNCATEGORIZED_INCOME);
+                                receiverTransaction.setSubcategories(OTHER_INCOME);
+
+                                com.example.mobanko.entities.Transaction senderTransaction = new com.example.mobanko.entities.Transaction();
+                                senderTransaction.setBalance(amountValue);
+                                senderTransaction.setRecipientID(receiverAccount.getIBAN());
+                                senderTransaction.setSenderID(senderAccount.getIBAN());
+                                senderTransaction.setDateOfTransaction(now().toString());
+                                senderTransaction.setCurrencyType(RON);
+                                senderTransaction.setID(UUID.randomUUID().toString());
+                                senderTransaction.setCategories(UNCATEGORIZED_EXPENSES);
+                                senderTransaction.setSubcategories(UNCATEGORIZED);
+
 
                                 receiverUser.getAccounts().forEach(account -> {
-                                    if (Objects.equals(account.getIBAN(), receiverAccount.getIBAN())){
+                                    if (Objects.equals(account.getIBAN(), receiverAccount.getIBAN())) {
                                         double currentBalance = account.getBalance();
                                         account.setBalance(currentBalance + amountValue);
+                                        account.getTransactions().add(receiverTransaction);
                                     }
                                 });
 
@@ -103,6 +132,7 @@ public class SignTransferActivity extends AppCompatActivity {
                                     if (Objects.equals(account.getIBAN(), senderAccount.getIBAN())){
                                         double currentBalance = account.getBalance();
                                         account.setBalance(currentBalance - amountValue);
+                                        account.getTransactions().add(senderTransaction);
                                     }
                                 });
 
