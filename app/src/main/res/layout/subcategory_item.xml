@@ -27,7 +27,7 @@
         android:layout_marginStart="16dp"
         android:text="Pensions"
         android:textColor="@color/text_dark_blue"
-        android:textSize="20sp"
+        android:textSize="25sp"
         app:layout_constraintBottom_toBottomOf="@+id/radioButton"
         app:layout_constraintStart_toEndOf="@+id/radioButton"
         app:layout_constraintTop_toTopOf="@+id/radioButton"

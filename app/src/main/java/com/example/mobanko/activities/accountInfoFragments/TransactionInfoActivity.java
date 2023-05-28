@@ -6,6 +6,7 @@ import static com.example.mobanko.utils.NumberUtils.getFirstTwoDecimalsFromDoubl
 import static com.example.mobanko.utils.NumberUtils.getWholeValueFromDoubleAsString;
 import static com.example.mobanko.utils.TimeUtils.getDynamicDate;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
@@ -15,6 +16,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.res.ResourcesCompat;
 
 import com.example.mobanko.R;
+import com.example.mobanko.activities.CategoryActivity;
 import com.example.mobanko.entities.Account;
 import com.example.mobanko.entities.PaymentType;
 import com.example.mobanko.entities.Subcategories;
@@ -60,6 +62,8 @@ public class TransactionInfoActivity extends AppCompatActivity {
         var paymentType = (TextView) findViewById(R.id.textView68);
         var referenceId = (TextView) findViewById(R.id.textView70);
 
+        var changeTagIntent = new Intent(this, CategoryActivity.class);
+
         StringBuilder balanceBuilder = new StringBuilder();
 
         if (Objects.equals(accountInfo.getIBAN(), transaction.getSenderID())) {
@@ -75,6 +79,7 @@ public class TransactionInfoActivity extends AppCompatActivity {
             otherUserStatus.setText("Recipient");
             otherUserName.setText(transaction.getRecipientName());
             otherUserIBAN.setText(transaction.getRecipientID());
+            changeTagIntent.putExtra("myStatus", "SENDER");
 
             balanceBuilder.append("-");
 
@@ -91,6 +96,8 @@ public class TransactionInfoActivity extends AppCompatActivity {
             otherUserStatus.setText("Sender");
             otherUserName.setText(transaction.getSenderName());
             otherUserIBAN.setText(transaction.getSenderID());
+
+            changeTagIntent.putExtra("myStatus", "RECEIVER");
         }
 
         balanceBuilder.append(getWholeValueFromDoubleAsString(transaction.getBalance()));
@@ -112,7 +119,7 @@ public class TransactionInfoActivity extends AppCompatActivity {
         transactionInfoTag.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                startActivity(changeTagIntent);
             }
         });
 
