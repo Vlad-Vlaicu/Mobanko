@@ -18,6 +18,11 @@ public class TransactionsFragment extends Fragment {
 
     private AccountInfoActivity mActivity;
 
+    private AccountInfoTransactionsAdapter adapter;
+    private RecyclerView recycleView;
+
+    private View view;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,17 +50,29 @@ public class TransactionsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.fragment_transactions, container, false);
+        view = inflater.inflate(R.layout.fragment_transactions, container, false);
 
-        var recycleView = (RecyclerView) view.findViewById(R.id.transactions_recycle_view);
+        recycleView = (RecyclerView) view.findViewById(R.id.transactions_recycle_view);
 
-
-        var adapter = new AccountInfoTransactionsAdapter(view.getContext(), mActivity);
+        adapter = new AccountInfoTransactionsAdapter(view.getContext(), mActivity);
 
         recycleView.setAdapter(adapter);
         recycleView.setLayoutManager(new LinearLayoutManager(view.getContext()));
 
-
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        adapter = new AccountInfoTransactionsAdapter(view.getContext(), mActivity);
+        recycleView.setAdapter(adapter);
+        recycleView.setLayoutManager(new LinearLayoutManager(view.getContext()));
+    }
+
+    public void forcedResume() {
+        adapter = new AccountInfoTransactionsAdapter(view.getContext(), mActivity);
+        recycleView.setAdapter(adapter);
+        recycleView.setLayoutManager(new LinearLayoutManager(view.getContext()));
     }
 }

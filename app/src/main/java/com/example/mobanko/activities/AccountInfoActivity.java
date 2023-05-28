@@ -1,10 +1,14 @@
 package com.example.mobanko.activities;
 
+import static com.example.mobanko.utils.NumberUtils.getFirstTwoDecimalsFromDouble;
+import static com.example.mobanko.utils.NumberUtils.getWholeValueFromDoubleAsString;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.res.ResourcesCompat;
@@ -20,6 +24,11 @@ import com.example.mobanko.activities.accountInfoFragments.TransactionInfoActivi
 import com.example.mobanko.activities.accountInfoFragments.TransactionsFragment;
 import com.example.mobanko.entities.Account;
 import com.example.mobanko.entities.User;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,6 +37,8 @@ public class AccountInfoActivity extends AppCompatActivity {
 
     User userInfo;
     int accountId;
+
+    List<Fragment> fragments;
 
     Intent transactionInfoIntent;
 
@@ -38,16 +49,14 @@ public class AccountInfoActivity extends AppCompatActivity {
 
         ViewPager2 viewPager;
         FragmentManager fragmentManager;
-        List<Fragment> fragments;
+
 
         var intent = getIntent();
         userInfo = (User) intent.getSerializableExtra("userInfo");
         accountId = intent.getIntExtra("accountId", -1);
         var account = getAccount();
 
-        transactionInfoIntent = new Intent(this, TransactionInfoActivity.class);
-        transactionInfoIntent.putExtra("userInfo", userInfo);
-        transactionInfoIntent.putExtra("accountInfo", account);
+        initIntent();
 
         TextView accountName = (TextView) findViewById(R.id.textView38);
         TextView balanceWhole = (TextView) findViewById(R.id.textView39);
@@ -70,17 +79,8 @@ public class AccountInfoActivity extends AppCompatActivity {
         accountName.setText(account.getName());
         backText.setText(account.getName());
 
-        int wholeBalanceNumber = (int) account.getBalance();
-        double decimalPart = account.getBalance() - wholeBalanceNumber;
-        decimalPart = Math.round(decimalPart * 100.0) / 100.0;
-        balanceWhole.setText(String.valueOf(wholeBalanceNumber) + ",");
-
-        if (decimalPart == 0) {
-            balanceDecimal.setText("00");
-        } else {
-            balanceDecimal.setText(String.valueOf(decimalPart));
-        }
-
+        balanceWhole.setText(getWholeValueFromDoubleAsString(account.getBalance()) + ",");
+        balanceDecimal.setText(getFirstTwoDecimalsFromDouble(account.getBalance()));
         balanceCurrency.setText(account.getCurrencyType().toString());
 
         backText.setOnClickListener(view -> finish());
@@ -150,4 +150,37 @@ public class AccountInfoActivity extends AppCompatActivity {
         startActivity(transactionInfoIntent);
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        var mRunnable = new Runnable() {
+            @Override
+            public void run() {
+                FirebaseFirestore db = FirebaseFirestore.getInstance();
+                DocumentReference userRef = db.collection("Users").document(userInfo.getId());
+                userRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()) {
+                            DocumentSnapshot document = task.getResult();
+                            if (document.exists()) {
+                                userInfo = document.toObject(User.class);
+                                initIntent();
+                                ((TransactionsFragment) fragments.get(0)).forcedResume();
+                            }
+                        }
+                    }
+                });
+            }
+        };
+
+        mRunnable.run();
+
+    }
+
+    void initIntent() {
+        transactionInfoIntent = new Intent(this, TransactionInfoActivity.class);
+        transactionInfoIntent.putExtra("userInfo", userInfo);
+        transactionInfoIntent.putExtra("accountInfo", getAccount());
+    }
 }

@@ -1,7 +1,6 @@
 package com.example.mobanko.activities;
 
 import android.os.Bundle;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -9,6 +8,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.mobanko.R;
+import com.example.mobanko.activities.accountInfoFragments.TransactionInfoActivity;
 import com.example.mobanko.activities.adapters.SubcategoriesAdapter;
 import com.example.mobanko.entities.Categories;
 import com.example.mobanko.entities.Subcategories;
@@ -33,7 +33,8 @@ public class SubcategoryActivity extends AppCompatActivity {
         returnZone.setOnClickListener(view -> finish());
     }
 
-    public void selectSubcategory(Subcategories subcategory) {
-        Toast.makeText(this, Subcategories.getSubcategoryString(subcategory), Toast.LENGTH_SHORT).show();
+    public void selectSubcategory(Subcategories subcategory, Categories category) {
+        TransactionInfoActivity.changeTag(subcategory, category);
+        finish();
     }
 }

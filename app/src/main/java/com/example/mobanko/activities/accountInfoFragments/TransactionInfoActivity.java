@@ -11,6 +11,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.res.ResourcesCompat;
@@ -18,16 +20,58 @@ import androidx.core.content.res.ResourcesCompat;
 import com.example.mobanko.R;
 import com.example.mobanko.activities.CategoryActivity;
 import com.example.mobanko.entities.Account;
+import com.example.mobanko.entities.Categories;
 import com.example.mobanko.entities.PaymentType;
 import com.example.mobanko.entities.Subcategories;
+import com.example.mobanko.entities.Transaction;
 import com.example.mobanko.entities.User;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 
 import java.util.Objects;
 
 public class TransactionInfoActivity extends AppCompatActivity {
 
-    User userInfo;
-    Account accountInfo;
+    static User userInfo;
+    static Account accountInfo;
+    static TextView tagTextView;
+    static Transaction transactionInfo;
+
+    public static void changeTag(Subcategories subcategories, Categories categories) {
+
+        tagTextView.setText(Subcategories.getSubcategoryString(subcategories));
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        DocumentReference accountRef = db.collection("Accounts").document(accountInfo.getIBAN());
+        DocumentReference userRef = db.collection("Users").document(userInfo.getId());
+
+
+        db.runTransaction(new com.google.firebase.firestore.Transaction.Function<Void>() {
+            @Nullable
+            @Override
+            public Void apply(@NonNull com.google.firebase.firestore.Transaction transaction) throws FirebaseFirestoreException {
+
+                accountInfo.getTransactions().forEach(s -> {
+                    if (s.getID().equals(transactionInfo.getID())) {
+                        s.setCategories(categories);
+                        s.setSubcategories(subcategories);
+                    }
+                });
+
+                userInfo.getAccounts().replaceAll(item -> {
+                    if (item.getIBAN().equals(accountInfo.getIBAN())) {
+                        return accountInfo;
+                    }
+                    return item;
+                });
+
+                transaction.set(accountRef, accountInfo);
+                transaction.set(userRef, userInfo);
+
+                return null;
+            }
+        });
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +87,7 @@ public class TransactionInfoActivity extends AppCompatActivity {
             finish();
         }
 
-        var transaction = transactionOptional.get();
+        transactionInfo = transactionOptional.get();
 
         var otherUserNameTextView = (TextView) findViewById(R.id.textView53);
         var iconImage = (TextView) findViewById(R.id.imageView20);
@@ -53,7 +97,7 @@ public class TransactionInfoActivity extends AppCompatActivity {
         var returnZone = (ConstraintLayout) findViewById(R.id.transactionInfoHeader);
         var replyButton = (TextView) findViewById(R.id.textView57);
         var shareButton = (TextView) findViewById(R.id.textView58);
-        var tagTextView = (TextView) findViewById(R.id.textView59);
+        tagTextView = (TextView) findViewById(R.id.textView59);
         var transactionInfoTag = (ConstraintLayout) findViewById(R.id.transactionInfoTag);
         var otherUserStatus = (TextView) findViewById(R.id.textView62);
         var otherUserName = (TextView) findViewById(R.id.textView63);
@@ -66,10 +110,10 @@ public class TransactionInfoActivity extends AppCompatActivity {
 
         StringBuilder balanceBuilder = new StringBuilder();
 
-        if (Objects.equals(accountInfo.getIBAN(), transaction.getSenderID())) {
+        if (Objects.equals(accountInfo.getIBAN(), transactionInfo.getSenderID())) {
             //I am sender
 
-            otherUserNameTextView.setText(transaction.getRecipientName());
+            otherUserNameTextView.setText(transactionInfo.getRecipientName());
             iconImage.setBackground(ResourcesCompat.getDrawable(this.getResources(), R.mipmap.send_transaction_icon, null));
             balanceWholePart.setTextColor(ResourcesCompat.getColor(this.getResources(), R.color.text_dark_blue, null));
             balanceDecimalPart.setTextColor(ResourcesCompat.getColor(this.getResources(), R.color.text_dark_blue, null));
@@ -77,8 +121,8 @@ public class TransactionInfoActivity extends AppCompatActivity {
             balanceCurrency.setTextColor(ResourcesCompat.getColor(this.getResources(), R.color.text_dark_blue, null));
             replyButton.setVisibility(GONE);
             otherUserStatus.setText("Recipient");
-            otherUserName.setText(transaction.getRecipientName());
-            otherUserIBAN.setText(transaction.getRecipientID());
+            otherUserName.setText(transactionInfo.getRecipientName());
+            otherUserIBAN.setText(transactionInfo.getRecipientID());
             changeTagIntent.putExtra("myStatus", "SENDER");
 
             balanceBuilder.append("-");
@@ -86,7 +130,7 @@ public class TransactionInfoActivity extends AppCompatActivity {
         } else {
             //I am receiver
 
-            otherUserNameTextView.setText(transaction.getSenderName());
+            otherUserNameTextView.setText(transactionInfo.getSenderName());
             iconImage.setBackground(ResourcesCompat.getDrawable(this.getResources(), R.mipmap.receive_transaction_icon, null));
             balanceWholePart.setTextColor(ResourcesCompat.getColor(this.getResources(), R.color.text_green, null));
             balanceDecimalPart.setTextColor(ResourcesCompat.getColor(this.getResources(), R.color.text_green, null));
@@ -94,27 +138,27 @@ public class TransactionInfoActivity extends AppCompatActivity {
             balanceCurrency.setTextColor(ResourcesCompat.getColor(this.getResources(), R.color.text_green, null));
             replyButton.setVisibility(VISIBLE);
             otherUserStatus.setText("Sender");
-            otherUserName.setText(transaction.getSenderName());
-            otherUserIBAN.setText(transaction.getSenderID());
+            otherUserName.setText(transactionInfo.getSenderName());
+            otherUserIBAN.setText(transactionInfo.getSenderID());
 
             changeTagIntent.putExtra("myStatus", "RECEIVER");
         }
 
-        balanceBuilder.append(getWholeValueFromDoubleAsString(transaction.getBalance()));
+        balanceBuilder.append(getWholeValueFromDoubleAsString(transactionInfo.getBalance()));
 
         balanceWholePart.setText(balanceBuilder.toString());
-        balanceDecimalPart.setText(getFirstTwoDecimalsFromDouble(transaction.getBalance()));
-        balanceCurrency.setText(transaction.getCurrencyType().toString());
+        balanceDecimalPart.setText(getFirstTwoDecimalsFromDouble(transactionInfo.getBalance()));
+        balanceCurrency.setText(transactionInfo.getCurrencyType().toString());
 
         returnZone.setOnClickListener(view -> finish());
 
-        tagTextView.setText(Subcategories.getSubcategoryString(transaction.getSubcategories()));
+        tagTextView.setText(Subcategories.getSubcategoryString(transactionInfo.getSubcategories()));
 
-        processingDate.setText(getDynamicDate(transaction.getDateOfTransaction()));
+        processingDate.setText(getDynamicDate(transactionInfo.getDateOfTransaction()));
 
-        paymentType.setText(PaymentType.getPaymentString(transaction.getPaymentType()));
+        paymentType.setText(PaymentType.getPaymentString(transactionInfo.getPaymentType()));
 
-        referenceId.setText(transaction.getID());
+        referenceId.setText(transactionInfo.getID());
 
         transactionInfoTag.setOnClickListener(new View.OnClickListener() {
             @Override

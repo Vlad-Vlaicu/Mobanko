@@ -25,10 +25,13 @@ public class SubcategoriesAdapter extends RecyclerView.Adapter<SubcategoriesAdap
 
     List<Subcategories> subcategories;
 
+    Categories categories;
+
     public SubcategoriesAdapter(Context context, SubcategoryActivity subcategory, Categories category) {
         this.context = context;
         subcategoryActivity = subcategory;
         subcategories = Subcategories.getSubcategories(category);
+        categories = category;
     }
 
     @NonNull
@@ -48,7 +51,7 @@ public class SubcategoriesAdapter extends RecyclerView.Adapter<SubcategoriesAdap
 
         holder.itemView.setOnClickListener(view -> {
             holder.button.setChecked(true);
-            subcategoryActivity.selectSubcategory(subcategories.get(position));
+            subcategoryActivity.selectSubcategory(subcategories.get(position), categories);
 
         });
 

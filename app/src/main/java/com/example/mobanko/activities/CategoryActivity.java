@@ -37,6 +37,7 @@ public class CategoryActivity extends AppCompatActivity {
         var subcategoriesIntent = new Intent(this, SubcategoryActivity.class);
         subcategoriesIntent.putExtra("category", category);
         startActivity(subcategoriesIntent);
+        finish();
     }
 
 }

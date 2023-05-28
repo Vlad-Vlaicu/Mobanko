@@ -8,14 +8,14 @@ import static com.example.mobanko.entities.Subcategories.OTHER_INCOME;
 import static com.example.mobanko.entities.Subcategories.UNCATEGORIZED;
 import static java.time.LocalDateTime.now;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.mobanko.R;
 import com.example.mobanko.databinding.ActivitySignTransferBinding;
@@ -135,16 +135,24 @@ public class SignTransferActivity extends AppCompatActivity {
                                     }
                                 });
 
+                                receiverAccount.setBalance(receiverAccount.getBalance() + amountValue);
+                                receiverAccount.getTransactions().add(receiverTransaction);
+
                                 senderUser.getAccounts().forEach(account -> {
-                                    if (Objects.equals(account.getIBAN(), senderAccount.getIBAN())){
+                                    if (Objects.equals(account.getIBAN(), senderAccount.getIBAN())) {
                                         double currentBalance = account.getBalance();
                                         account.setBalance(currentBalance - amountValue);
                                         account.getTransactions().add(senderTransaction);
                                     }
                                 });
 
+                                senderAccount.setBalance(senderAccount.getBalance() - amountValue);
+                                senderAccount.getTransactions().add(senderTransaction);
+
                                 transaction.set(receiverUserRef, receiverUser);
                                 transaction.set(senderUserRef, senderUser);
+                                transaction.set(receiverAccountRef, receiverAccount);
+                                transaction.set(senderAccountRef, senderAccount);
 
                                 return null;
                             }
