@@ -7,6 +7,7 @@ import static com.example.mobanko.utils.NumberUtils.getWholeValueFromDoubleAsStr
 import static com.example.mobanko.utils.TimeUtils.getDynamicDate;
 
 import android.os.Bundle;
+import android.view.View;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -107,6 +108,13 @@ public class TransactionInfoActivity extends AppCompatActivity {
         paymentType.setText(PaymentType.getPaymentString(transaction.getPaymentType()));
 
         referenceId.setText(transaction.getID());
+
+        transactionInfoTag.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
 
     }
 }
