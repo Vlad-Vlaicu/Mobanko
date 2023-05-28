@@ -1,8 +1,7 @@
 package com.example.mobanko.activities;
 
-import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -30,14 +29,14 @@ public class CategoryActivity extends AppCompatActivity {
         var adapter = new CategoriesAdapter(this, status, this);
         categoryRecycleView.setAdapter(adapter);
         categoryRecycleView.setLayoutManager(new LinearLayoutManager(this));
-        setResult(Activity.RESULT_CANCELED);
+
+        returnZone.setOnClickListener(view -> finish());
     }
 
     public void selectCategory(Categories category) {
-        Toast.makeText(this, Categories.getCategoryString(category), Toast.LENGTH_SHORT).show();
-
-
+        var subcategoriesIntent = new Intent(this, SubcategoryActivity.class);
+        subcategoriesIntent.putExtra("category", category);
+        startActivity(subcategoriesIntent);
     }
-
 
 }
