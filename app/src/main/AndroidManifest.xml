@@ -13,6 +13,11 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MoBanko">
         <activity
+            android:name=".activities.accountInfoFragments.TransactionInfoActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.MoBankoInfo" />
+        <activity
             android:name=".activities.AccountInfoActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.MoBankoTransfer" />

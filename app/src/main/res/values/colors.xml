@@ -21,4 +21,6 @@
     <color name="tint_light_gray">#e2e3e5</color>
     <color name="transfer_background">#e1015a</color>
     <color name="dark_gray">#757575</color>
+    <color name="blue_writing">#2b67c9</color>
+    <color name="blue_selected">#f2f9ff</color>
 </resources>

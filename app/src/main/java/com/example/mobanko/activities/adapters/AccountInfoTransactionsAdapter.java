@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -49,13 +50,13 @@ public class AccountInfoTransactionsAdapter extends RecyclerView.Adapter<Recycle
 
 
         var sortedTransactions = account.getTransactions().stream()
-                .sorted(Comparator.comparing(Transaction::getDateOfTransaction))
+                .sorted(Comparator.comparing(Transaction::getDateOfTransaction).reversed())
                 .collect(toList());
 
         var headersList = sortedTransactions.stream()
                 .map(s -> LocalDateTime.parse(s.getDateOfTransaction()))
                 .map(s -> LocalDateTime.of(s.getYear(), s.getMonthValue(), s.getDayOfMonth(), 0, 0))
-                .sorted(Comparator.comparing(LocalDateTime::getYear).thenComparing(LocalDateTime::getMonth))
+                .sorted(Comparator.comparing(LocalDateTime::getYear).thenComparing(LocalDateTime::getMonth).reversed())
                 .distinct()
                 .collect(toList());
 
@@ -129,6 +130,8 @@ public class AccountInfoTransactionsAdapter extends RecyclerView.Adapter<Recycle
         TextView transactionSubcategory;
         TextView balance;
 
+        CardView transactionCardView;
+
         public ItemViewHolder(@NonNull View itemView) {
             super(itemView);
 
@@ -138,8 +141,27 @@ public class AccountInfoTransactionsAdapter extends RecyclerView.Adapter<Recycle
             transactionType = (TextView) itemView.findViewById(R.id.textView50);
             transactionSubcategory = (TextView) itemView.findViewById(R.id.textView51);
             balance = (TextView) itemView.findViewById(R.id.textView48);
+            transactionCardView = (CardView) itemView.findViewById(R.id.transactionCardView);
+
+
+            /*
+            itemView.setOnTouchListener((v, event) -> {
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_DOWN ->
+                           // transactionCardView.setBackgroundColor(ResourcesCompat.getColor(context.getResources(), R.color.light_gray, null));
+                    case MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL ->{
+                        //transactionCardView.setBackgroundColor(ResourcesCompat.getColor(context.getResources(), R.color.white, null));
+                        v.performClick();
+                    }
+                }
+                return false;
+            });
+
+             */
+
 
         }
+
 
         public void bindData(Transaction transaction) {
 
@@ -188,6 +210,7 @@ public class AccountInfoTransactionsAdapter extends RecyclerView.Adapter<Recycle
             balanceBuilder.append(wholePart).append(",").append(decimalString).append(" ").append(transaction.getCurrencyType().toString());
             balance.setText(balanceBuilder.toString());
 
+            itemView.setOnClickListener(view -> accountInfoActivity.getTransactionInfo(transaction.getID()));
         }
     }
 

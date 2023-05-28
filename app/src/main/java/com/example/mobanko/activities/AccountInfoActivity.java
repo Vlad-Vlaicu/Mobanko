@@ -1,5 +1,10 @@
 package com.example.mobanko.activities;
 
+import android.content.Intent;
+import android.os.Bundle;
+import android.widget.ImageView;
+import android.widget.TextView;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.res.ResourcesCompat;
@@ -8,14 +13,10 @@ import androidx.fragment.app.FragmentManager;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 
-import android.os.Bundle;
-import android.provider.ContactsContract;
-import android.widget.ImageView;
-import android.widget.TextView;
-
 import com.example.mobanko.R;
 import com.example.mobanko.activities.accountInfoFragments.FunctionsFragment;
 import com.example.mobanko.activities.accountInfoFragments.InfoFragment;
+import com.example.mobanko.activities.accountInfoFragments.TransactionInfoActivity;
 import com.example.mobanko.activities.accountInfoFragments.TransactionsFragment;
 import com.example.mobanko.entities.Account;
 import com.example.mobanko.entities.User;
@@ -27,6 +28,8 @@ public class AccountInfoActivity extends AppCompatActivity {
 
     User userInfo;
     int accountId;
+
+    Intent transactionInfoIntent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +44,10 @@ public class AccountInfoActivity extends AppCompatActivity {
         userInfo = (User) intent.getSerializableExtra("userInfo");
         accountId = intent.getIntExtra("accountId", -1);
         var account = getAccount();
+
+        transactionInfoIntent = new Intent(this, TransactionInfoActivity.class);
+        transactionInfoIntent.putExtra("userInfo", userInfo);
+        transactionInfoIntent.putExtra("accountInfo", account);
 
         TextView accountName = (TextView) findViewById(R.id.textView38);
         TextView balanceWhole = (TextView) findViewById(R.id.textView39);
@@ -136,5 +143,10 @@ public class AccountInfoActivity extends AppCompatActivity {
 
     public Account getAccount() {
         return userInfo.getAccounts().get(accountId);
+    }
+
+    public void getTransactionInfo(String transactionId) {
+        transactionInfoIntent.putExtra("transactionId", transactionId);
+        startActivity(transactionInfoIntent);
     }
 }
