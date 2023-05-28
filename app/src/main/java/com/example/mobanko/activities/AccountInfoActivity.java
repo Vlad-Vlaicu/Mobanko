@@ -149,4 +149,5 @@ public class AccountInfoActivity extends AppCompatActivity {
         transactionInfoIntent.putExtra("transactionId", transactionId);
         startActivity(transactionInfoIntent);
     }
+
 }

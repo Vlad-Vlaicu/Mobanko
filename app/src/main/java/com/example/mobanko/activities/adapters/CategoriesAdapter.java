@@ -11,17 +11,21 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.mobanko.R;
+import com.example.mobanko.activities.CategoryActivity;
 import com.example.mobanko.entities.Categories;
 
 import java.util.List;
 
 public class CategoriesAdapter extends RecyclerView.Adapter<CategoriesAdapter.CategoriesViewHolder> {
 
+    private static CategoryActivity categoryActivity;
+
     Context context;
     List<Categories> categoriesList;
     List<Drawable> categoriesIconsList;
 
-    public CategoriesAdapter(Context context, String transactionType) {
+    public CategoriesAdapter(Context context, String transactionType, CategoryActivity activity) {
+        categoryActivity = activity;
         this.context = context;
         switch (transactionType) {
             case "SENDER" -> {
@@ -51,6 +55,9 @@ public class CategoriesAdapter extends RecyclerView.Adapter<CategoriesAdapter.Ca
     public void onBindViewHolder(@NonNull CategoriesAdapter.CategoriesViewHolder holder, int position) {
         holder.categoryIcon.setBackground(categoriesIconsList.get(position));
         holder.textCategory.setText(Categories.getCategoryString(categoriesList.get(position)));
+
+        holder.itemView.setOnClickListener(view -> categoryActivity.selectCategory(categoriesList.get(position)));
+
     }
 
     @Override
@@ -68,6 +75,7 @@ public class CategoriesAdapter extends RecyclerView.Adapter<CategoriesAdapter.Ca
 
             categoryIcon = (TextView) itemView.findViewById(R.id.imageView23);
             textCategory = (TextView) itemView.findViewById(R.id.textView52);
+
         }
     }
 

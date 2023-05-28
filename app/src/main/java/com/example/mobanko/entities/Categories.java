@@ -86,4 +86,31 @@ public enum Categories {
             case UNCATEGORIZED_INCOME -> "Uncategorized income";
         };
     }
+
+    public static Categories getEnumFromString(String s) {
+        return switch (s) {
+            case "Living & Energy" -> LIVING_N_ENERGY;
+            case "Food & Dining" -> FOOD_N_DINING;
+            case "Health & Self-care" -> HEALTH_N_SELFCARE;
+            case "Clothing & Shoes" -> CLOTHING_N_SHOES;
+            case "Communication & Media" -> COMMUNICATION_N_MEDIA;
+            case "Leisure & Hobbies" -> LEISURE_N_HOBBIES;
+            case "Education" -> EDUCATION;
+            case "Car" -> CAR;
+            case "Public transport & Taxi" -> PUBLIC_TRANSPORT_N_TAXI;
+            case "Holidays & Travel" -> HOLIDAYS_N_TRAVEL;
+            case "Withdrawal" -> WITHDRAWAL;
+            case "Alimony & Pocket money" -> ALIMONY_N_POCKET_MONEY;
+            case "Online Shops" -> ONLINE_SHOPS;
+            case "Savings & Investment" -> SAVING_N_INVESTMENT;
+            case "Taxes" -> TAXES;
+            case "Transactions & Fees" -> TRANSACTIONS_N_FEES;
+            case "Other expense" -> OTHER_EXPENSES;
+            case "Uncategorized expenses" -> UNCATEGORIZED_EXPENSES;
+            case "Income" -> INCOME;
+            case "Additional Income" -> ADDITIONAL_INCOME;
+            case "Uncategorized income" -> UNCATEGORIZED_INCOME;
+            default -> null;
+        };
+    }
 }
