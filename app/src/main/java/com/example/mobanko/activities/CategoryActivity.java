@@ -28,7 +28,8 @@ public class CategoryActivity extends AppCompatActivity {
 
         var adapter = new CategoriesAdapter(this, status, this);
         categoryRecycleView.setAdapter(adapter);
-        categoryRecycleView.setLayoutManager(new LinearLayoutManager(this));
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        categoryRecycleView.setLayoutManager(layoutManager);
 
         returnZone.setOnClickListener(view -> finish());
     }

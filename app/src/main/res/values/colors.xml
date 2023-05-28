@@ -25,4 +25,5 @@
     <color name="blue_writing">#2b67c9</color>
     <color name="blue_selected">#f2f9ff</color>
     <color name="expenses_bar_color">#f080ae</color>
+    <color name="selected_bar">#b5014a</color>
 </resources>

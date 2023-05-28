@@ -58,6 +58,9 @@ public class AccountInfoActivity extends AppCompatActivity {
 
         initIntent();
 
+        var statisticsIntent = new Intent(this, CashFlowActivity.class);
+        statisticsIntent.putExtra("accountInfo", account);
+
         TextView accountName = (TextView) findViewById(R.id.textView38);
         TextView balanceWhole = (TextView) findViewById(R.id.textView39);
         TextView balanceDecimal = (TextView) findViewById(R.id.textView40);
@@ -138,6 +141,8 @@ public class AccountInfoActivity extends AppCompatActivity {
         transactionNavbar.setOnClickListener(view -> viewPager.setCurrentItem(0, true));
         functionsNavbar.setOnClickListener(view -> viewPager.setCurrentItem(1, true));
         infoNavbar.setOnClickListener(view -> viewPager.setCurrentItem(2, true));
+
+        statisticsImage.setOnClickListener(view -> startActivity(statisticsIntent));
 
     }
 
