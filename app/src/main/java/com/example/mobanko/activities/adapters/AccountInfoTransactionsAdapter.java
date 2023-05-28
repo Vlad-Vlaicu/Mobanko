@@ -1,6 +1,8 @@
 package com.example.mobanko.activities.adapters;
 
-import static java.time.LocalDateTime.now;
+import static com.example.mobanko.utils.NumberUtils.getFirstTwoDecimalsFromDouble;
+import static com.example.mobanko.utils.NumberUtils.getWholeValueFromDoubleAsString;
+import static com.example.mobanko.utils.TimeUtils.getDynamicDate;
 import static java.util.stream.Collectors.toList;
 
 import android.content.Context;
@@ -21,7 +23,6 @@ import com.example.mobanko.entities.PaymentType;
 import com.example.mobanko.entities.Subcategories;
 import com.example.mobanko.entities.Transaction;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -165,7 +166,6 @@ public class AccountInfoTransactionsAdapter extends RecyclerView.Adapter<Recycle
 
         public void bindData(Transaction transaction) {
 
-            StringBuilder sb = new StringBuilder();
             StringBuilder balanceBuilder = new StringBuilder();
             if (Objects.equals(transaction.getSenderID(), account.getIBAN())) {
                 transactionIcon.setBackground(ResourcesCompat.getDrawable(context.getResources(), R.mipmap.send_transaction_icon, null));
@@ -180,34 +180,15 @@ public class AccountInfoTransactionsAdapter extends RecyclerView.Adapter<Recycle
 
             var transactionDate = LocalDateTime.parse(transaction.getDateOfTransaction());
 
-            sb.append(transactionDate.getDayOfMonth()).append("/").append(transactionDate.getMonthValue()).append("/").append(transactionDate.getYear());
-
-            if (transactionDate.getYear() == now().getYear() && transactionDate.getMonthValue() == now().getMonthValue()) {
-
-                if (transactionDate.getDayOfMonth() == now().getDayOfMonth()) {
-                    dateOfTransaction.setText("Today");
-                } else if (transactionDate.getDayOfMonth() == LocalDate.now().minusDays(1).getDayOfMonth()) {
-                    dateOfTransaction.setText("Yesterday");
-                }
-            } else {
-                dateOfTransaction.setText(sb.toString());
-            }
+            dateOfTransaction.setText(getDynamicDate(transactionDate));
 
             transactionType.setText(PaymentType.getPaymentString(transaction.getPaymentType()));
             transactionSubcategory.setText(Subcategories.getSubcategoryString(transaction.getSubcategories()));
 
-            int wholePart = transaction.getBalance().intValue();
+            String wholePart = getWholeValueFromDoubleAsString(transaction.getBalance());
+            String decimalPart = getFirstTwoDecimalsFromDouble(transaction.getBalance());
 
-            // Get the decimal part with exactly two decimal places
-            double decimalPart = transaction.getBalance() - wholePart;
-            decimalPart = Math.round(decimalPart * 100.0) / 100.0;
-
-            String decimalString = String.valueOf(decimalPart);
-
-            if (decimalPart == 0) {
-                decimalString = "00";
-            }
-            balanceBuilder.append(wholePart).append(",").append(decimalString).append(" ").append(transaction.getCurrencyType().toString());
+            balanceBuilder.append(wholePart).append(",").append(decimalPart).append(" ").append(transaction.getCurrencyType().toString());
             balance.setText(balanceBuilder.toString());
 
             itemView.setOnClickListener(view -> accountInfoActivity.getTransactionInfo(transaction.getID()));

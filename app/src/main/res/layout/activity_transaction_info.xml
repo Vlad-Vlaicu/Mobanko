@@ -13,7 +13,7 @@
         android:orientation="vertical">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/trnsactionInfoHeader"
+            android:id="@+id/transactionInfoHeader"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
@@ -118,13 +118,15 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="@+id/textView54"
                     app:layout_constraintTop_toBottomOf="@+id/textView54"
-                    app:layout_constraintVertical_bias="0.097" />
+                    app:layout_constraintVertical_bias="0.0" />
 
                 <TextView
                     android:id="@+id/textView58"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="15dp"
                     android:background="@color/blue_selected"
                     android:fontFamily="@font/mainfonttext"
                     android:padding="10dp"
@@ -133,12 +135,12 @@
                     android:text="Share"
                     android:textColor="@color/blue_writing"
                     android:textSize="14sp"
-                    app:layout_constraintBottom_toBottomOf="@+id/textView57"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/textView57"
-                    app:layout_constraintTop_toTopOf="@+id/textView57"
+                    app:layout_constraintTop_toBottomOf="@+id/textView54"
                     app:layout_constraintVertical_bias="0.0" />
 
-                <ImageView
+                <TextView
                     android:id="@+id/imageView20"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
@@ -147,7 +149,7 @@
                     app:layout_constraintBottom_toBottomOf="@+id/textView54"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="@+id/textView53"
-                    app:srcCompat="@mipmap/receive_transaction_icon" />
+                    android:background="@mipmap/receive_transaction_icon" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </androidx.cardview.widget.CardView>
@@ -192,7 +194,6 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="16dp"
                         android:background="@drawable/image_round_border"
-                        android:fontFamily="@font/mainfonttext"
                         android:paddingStart="10dp"
                         android:paddingTop="8dp"
                         android:paddingEnd="10dp"
