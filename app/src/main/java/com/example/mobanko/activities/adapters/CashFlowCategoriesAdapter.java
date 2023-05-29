@@ -76,6 +76,8 @@ public class CashFlowCategoriesAdapter extends RecyclerView.Adapter<CashFlowCate
         totalString.append(total).append(" ").append(transactions.get(0).getCurrencyType());
 
         holder.balance.setText(totalString);
+
+        holder.itemView.setOnClickListener(view -> CashFlowActivity.selectCategory(category));
     }
 
     @Override
@@ -99,7 +101,6 @@ public class CashFlowCategoriesAdapter extends RecyclerView.Adapter<CashFlowCate
             textCategory = (TextView) itemView.findViewById(R.id.textView105);
             numberTransactions = (TextView) itemView.findViewById(R.id.textView106);
             balance = (TextView) itemView.findViewById(R.id.textView107);
-
         }
     }
 }

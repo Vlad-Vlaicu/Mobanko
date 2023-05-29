@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.util.TypedValue;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -39,7 +40,7 @@ public class CashFlowActivity extends AppCompatActivity {
 
     ActivityCashFlowBinding binding;
 
-    Context context;
+    static Context context;
 
     ConstraintLayout month1Layout;
     ConstraintLayout month2Layout;
@@ -127,198 +128,8 @@ public class CashFlowActivity extends AppCompatActivity {
         return selectedMonthTransactions;
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        binding = ActivityCashFlowBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
-
-        context = this;
-
-        var intent = getIntent();
-        accountInfo = (Account) intent.getSerializableExtra("accountInfo");
-
-        fragments = new ArrayList<>();
-        fragments.add(new CategoriesCashFlowFragment());
-        fragments.add(new MerchantsCashFlowFragment());
-        var fragmentManager = getSupportFragmentManager();
-
-        dateTextView = (TextView) findViewById(R.id.textView72);
-        monthOverall = (TextView) findViewById(R.id.textView79);
-        monthIncome = (TextView) findViewById(R.id.textView80);
-        monthExpenses = (TextView) findViewById(R.id.textView81);
-        TextView categoriesNavbar = (TextView) findViewById(R.id.textView82);
-        TextView merchantsNavbar = (TextView) findViewById(R.id.textView83);
-        ViewPager2 viewPager = (ViewPager2) findViewById(R.id.cashflowViewpager);
-
-        FragmentStateAdapter fragmentStateAdapter = new FragmentStateAdapter(fragmentManager, getLifecycle()) {
-            @Override
-            public int getItemCount() {
-                return fragments.size();
-            }
-
-            @Override
-            public Fragment createFragment(int position) {
-                return fragments.get(position);
-            }
-        };
-        viewPager.setAdapter(fragmentStateAdapter);
-
-        viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
-            @Override
-            public void onPageSelected(int position) {
-                super.onPageSelected(position);
-
-                // Update the TextView based on the selected fragment
-                if (position == 0) {
-
-                    categoriesNavbar.setTextColor(ResourcesCompat.getColor(getResources(), R.color.white, null));
-                    categoriesNavbar.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.underline_white, null));
-                    merchantsNavbar.setTextColor(ResourcesCompat.getColor(getResources(), R.color.expenses_bar_color, null));
-                    merchantsNavbar.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.empty_drawable, null));
-
-                } else if (position == 1) {
-
-                    merchantsNavbar.setTextColor(ResourcesCompat.getColor(getResources(), R.color.white, null));
-                    merchantsNavbar.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.underline_white, null));
-                    categoriesNavbar.setTextColor(ResourcesCompat.getColor(getResources(), R.color.expenses_bar_color, null));
-                    categoriesNavbar.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.empty_drawable, null));
-                    ((CategoriesCashFlowFragment) fragments.get(0)).forcedResume();
-                }
-            }
-        });
-
-        categoriesNavbar.setOnClickListener(view -> viewPager.setCurrentItem(0, true));
-        merchantsNavbar.setOnClickListener(view -> viewPager.setCurrentItem(1, true));
-
-
-        ImageView returnButton = (ImageView) findViewById(R.id.imageView15);
-
-        returnButton.setOnClickListener(view -> finish());
-
-
-        month1Layout = (ConstraintLayout) findViewById(R.id.month1);
-        TextView descMonth1 = (TextView) findViewById(R.id.textView84);
-        incomeBarMonth1 = (TextView) findViewById(R.id.textView85);
-        expensesBarMonth1 = (TextView) findViewById(R.id.textView86);
-
-        month2Layout = (ConstraintLayout) findViewById(R.id.month2);
-        TextView descMonth2 = (TextView) findViewById(R.id.textView87);
-        incomeBarMonth2 = (TextView) findViewById(R.id.textView88);
-        expensesBarMonth2 = (TextView) findViewById(R.id.textView89);
-
-        month3Layout = (ConstraintLayout) findViewById(R.id.month3);
-        TextView descMonth3 = (TextView) findViewById(R.id.textView90);
-        incomeBarMonth3 = (TextView) findViewById(R.id.textView91);
-        expensesBarMonth3 = (TextView) findViewById(R.id.textView92);
-
-        month4Layout = (ConstraintLayout) findViewById(R.id.month4);
-        TextView descMonth4 = (TextView) findViewById(R.id.textView93);
-        incomeBarMonth4 = (TextView) findViewById(R.id.textView94);
-        expensesBarMonth4 = (TextView) findViewById(R.id.textView95);
-
-        month5Layout = (ConstraintLayout) findViewById(R.id.month5);
-        TextView descMonth5 = (TextView) findViewById(R.id.textView96);
-        incomeBarMonth5 = (TextView) findViewById(R.id.textView97);
-        expensesBarMonth5 = (TextView) findViewById(R.id.textView98);
-
-        month6Layout = (ConstraintLayout) findViewById(R.id.month6);
-        TextView descMonth6 = (TextView) findViewById(R.id.textView99);
-        incomeBarMonth6 = (TextView) findViewById(R.id.textView100);
-        expensesBarMonth6 = (TextView) findViewById(R.id.textView101);
-
-        setBarValues();
-
-        setMonthText(descMonth6, 0);
-        setMonthText(descMonth5, 1);
-        setMonthText(descMonth4, 2);
-        setMonthText(descMonth3, 3);
-        setMonthText(descMonth2, 4);
-        setMonthText(descMonth1, 5);
-
-        month1Layout.setOnClickListener(view -> {
-
-            setMonthLayout(1);
-            dateTextView.setText(getCurrentMonthYearMinusMonthsString(5));
-            var date = getCurrentMonthYearMinusMonths(5);
-            var transactions = getTransactionsPerDate(date);
-            selectedMonthTransactions = transactions;
-
-            setMonthData(transactions);
-
-            ((CategoriesCashFlowFragment) fragments.get(0)).forcedResume();
-
-        });
-        month2Layout.setOnClickListener(view -> {
-
-            setMonthLayout(2);
-            dateTextView.setText(getCurrentMonthYearMinusMonthsString(4));
-            var date = getCurrentMonthYearMinusMonths(4);
-            var transactions = getTransactionsPerDate(date);
-            selectedMonthTransactions = transactions;
-
-            setMonthData(transactions);
-
-            ((CategoriesCashFlowFragment) fragments.get(0)).forcedResume();
-        });
-
-        month3Layout.setOnClickListener(view -> {
-
-            setMonthLayout(3);
-            dateTextView.setText(getCurrentMonthYearMinusMonthsString(3));
-            var date = getCurrentMonthYearMinusMonths(3);
-            var transactions = getTransactionsPerDate(date);
-            selectedMonthTransactions = transactions;
-
-            setMonthData(transactions);
-
-            ((CategoriesCashFlowFragment) fragments.get(0)).forcedResume();
-        });
-
-        month4Layout.setOnClickListener(view -> {
-
-            setMonthLayout(4);
-            dateTextView.setText(getCurrentMonthYearMinusMonthsString(2));
-            var date = getCurrentMonthYearMinusMonths(2);
-            var transactions = getTransactionsPerDate(date);
-            selectedMonthTransactions = transactions;
-
-            setMonthData(transactions);
-
-            ((CategoriesCashFlowFragment) fragments.get(0)).forcedResume();
-        });
-
-        month5Layout.setOnClickListener(view -> {
-
-            setMonthLayout(5);
-            dateTextView.setText(getCurrentMonthYearMinusMonthsString(1));
-            var date = getCurrentMonthYearMinusMonths(1);
-            var transactions = getTransactionsPerDate(date);
-            selectedMonthTransactions = transactions;
-
-            setMonthData(transactions);
-
-            ((CategoriesCashFlowFragment) fragments.get(0)).forcedResume();
-        });
-
-        month6Layout.setOnClickListener(view -> {
-
-            setMonthLayout(6);
-            dateTextView.setText(getCurrentMonthYearMinusMonthsString(0));
-            var date = getCurrentMonthYearMinusMonths(0);
-            var transactions = getTransactionsPerDate(date);
-            selectedMonthTransactions = transactions;
-            setMonthData(transactions);
-            ((CategoriesCashFlowFragment) fragments.get(0)).forcedResume();
-        });
-
-        setMonthLayout(6);
-        dateTextView.setText(getCurrentMonthYearMinusMonthsString(0));
-        var date = getCurrentMonthYearMinusMonths(0);
-        var transactions = getTransactionsPerDate(date);
-        selectedMonthTransactions = transactions;
-        setMonthData(transactions);
+    public static void selectCategory(Categories category) {
+        Toast.makeText(context, Categories.getCategoryString(category), Toast.LENGTH_SHORT).show();
     }
 
     List<Transaction> getTransactionsPerDate(LocalDateTime time) {
@@ -445,8 +256,198 @@ public class CashFlowActivity extends AppCompatActivity {
         monthExpenses.setText(expensesTotalString);
     }
 
-    public void selectCategory() {
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
 
+        binding = ActivityCashFlowBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+
+        context = this;
+
+        var intent = getIntent();
+        accountInfo = (Account) intent.getSerializableExtra("accountInfo");
+
+        fragments = new ArrayList<>();
+        fragments.add(new CategoriesCashFlowFragment());
+        fragments.add(new MerchantsCashFlowFragment());
+        var fragmentManager = getSupportFragmentManager();
+
+        dateTextView = findViewById(R.id.textView72);
+        monthOverall = findViewById(R.id.textView79);
+        monthIncome = findViewById(R.id.textView80);
+        monthExpenses = findViewById(R.id.textView81);
+        TextView categoriesNavbar = findViewById(R.id.textView82);
+        TextView merchantsNavbar = findViewById(R.id.textView83);
+        ViewPager2 viewPager = findViewById(R.id.cashflowViewpager);
+
+        FragmentStateAdapter fragmentStateAdapter = new FragmentStateAdapter(fragmentManager, getLifecycle()) {
+            @Override
+            public int getItemCount() {
+                return fragments.size();
+            }
+
+            @Override
+            public Fragment createFragment(int position) {
+                return fragments.get(position);
+            }
+        };
+        viewPager.setAdapter(fragmentStateAdapter);
+
+        viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
+            @Override
+            public void onPageSelected(int position) {
+                super.onPageSelected(position);
+
+                // Update the TextView based on the selected fragment
+                if (position == 0) {
+
+                    categoriesNavbar.setTextColor(ResourcesCompat.getColor(getResources(), R.color.white, null));
+                    categoriesNavbar.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.underline_white, null));
+                    merchantsNavbar.setTextColor(ResourcesCompat.getColor(getResources(), R.color.expenses_bar_color, null));
+                    merchantsNavbar.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.empty_drawable, null));
+
+                } else if (position == 1) {
+
+                    merchantsNavbar.setTextColor(ResourcesCompat.getColor(getResources(), R.color.white, null));
+                    merchantsNavbar.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.underline_white, null));
+                    categoriesNavbar.setTextColor(ResourcesCompat.getColor(getResources(), R.color.expenses_bar_color, null));
+                    categoriesNavbar.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.empty_drawable, null));
+                    ((CategoriesCashFlowFragment) fragments.get(0)).forcedResume();
+                }
+            }
+        });
+
+        categoriesNavbar.setOnClickListener(view -> viewPager.setCurrentItem(0, true));
+        merchantsNavbar.setOnClickListener(view -> viewPager.setCurrentItem(1, true));
+
+
+        ImageView returnButton = findViewById(R.id.imageView15);
+
+        returnButton.setOnClickListener(view -> finish());
+
+
+        month1Layout = findViewById(R.id.month1);
+        TextView descMonth1 = findViewById(R.id.textView84);
+        incomeBarMonth1 = findViewById(R.id.textView85);
+        expensesBarMonth1 = findViewById(R.id.textView86);
+
+        month2Layout = findViewById(R.id.month2);
+        TextView descMonth2 = findViewById(R.id.textView87);
+        incomeBarMonth2 = findViewById(R.id.textView88);
+        expensesBarMonth2 = findViewById(R.id.textView89);
+
+        month3Layout = findViewById(R.id.month3);
+        TextView descMonth3 = findViewById(R.id.textView90);
+        incomeBarMonth3 = findViewById(R.id.textView91);
+        expensesBarMonth3 = findViewById(R.id.textView92);
+
+        month4Layout = findViewById(R.id.month4);
+        TextView descMonth4 = findViewById(R.id.textView93);
+        incomeBarMonth4 = findViewById(R.id.textView94);
+        expensesBarMonth4 = findViewById(R.id.textView95);
+
+        month5Layout = findViewById(R.id.month5);
+        TextView descMonth5 = findViewById(R.id.textView96);
+        incomeBarMonth5 = findViewById(R.id.textView97);
+        expensesBarMonth5 = findViewById(R.id.textView98);
+
+        month6Layout = findViewById(R.id.month6);
+        TextView descMonth6 = findViewById(R.id.textView99);
+        incomeBarMonth6 = findViewById(R.id.textView100);
+        expensesBarMonth6 = findViewById(R.id.textView101);
+
+        setBarValues();
+
+        setMonthText(descMonth6, 0);
+        setMonthText(descMonth5, 1);
+        setMonthText(descMonth4, 2);
+        setMonthText(descMonth3, 3);
+        setMonthText(descMonth2, 4);
+        setMonthText(descMonth1, 5);
+
+        month1Layout.setOnClickListener(view -> {
+
+            setMonthLayout(1);
+            dateTextView.setText(getCurrentMonthYearMinusMonthsString(5));
+            var date = getCurrentMonthYearMinusMonths(5);
+            var transactions = getTransactionsPerDate(date);
+            selectedMonthTransactions = transactions;
+
+            setMonthData(transactions);
+
+            ((CategoriesCashFlowFragment) fragments.get(0)).forcedResume();
+
+        });
+        month2Layout.setOnClickListener(view -> {
+
+            setMonthLayout(2);
+            dateTextView.setText(getCurrentMonthYearMinusMonthsString(4));
+            var date = getCurrentMonthYearMinusMonths(4);
+            var transactions = getTransactionsPerDate(date);
+            selectedMonthTransactions = transactions;
+
+            setMonthData(transactions);
+
+            ((CategoriesCashFlowFragment) fragments.get(0)).forcedResume();
+        });
+
+        month3Layout.setOnClickListener(view -> {
+
+            setMonthLayout(3);
+            dateTextView.setText(getCurrentMonthYearMinusMonthsString(3));
+            var date = getCurrentMonthYearMinusMonths(3);
+            var transactions = getTransactionsPerDate(date);
+            selectedMonthTransactions = transactions;
+
+            setMonthData(transactions);
+
+            ((CategoriesCashFlowFragment) fragments.get(0)).forcedResume();
+        });
+
+        month4Layout.setOnClickListener(view -> {
+
+            setMonthLayout(4);
+            dateTextView.setText(getCurrentMonthYearMinusMonthsString(2));
+            var date = getCurrentMonthYearMinusMonths(2);
+            var transactions = getTransactionsPerDate(date);
+            selectedMonthTransactions = transactions;
+
+            setMonthData(transactions);
+
+            ((CategoriesCashFlowFragment) fragments.get(0)).forcedResume();
+        });
+
+        month5Layout.setOnClickListener(view -> {
+
+            setMonthLayout(5);
+            dateTextView.setText(getCurrentMonthYearMinusMonthsString(1));
+            var date = getCurrentMonthYearMinusMonths(1);
+            var transactions = getTransactionsPerDate(date);
+            selectedMonthTransactions = transactions;
+
+            setMonthData(transactions);
+
+            ((CategoriesCashFlowFragment) fragments.get(0)).forcedResume();
+        });
+
+        month6Layout.setOnClickListener(view -> {
+
+            setMonthLayout(6);
+            dateTextView.setText(getCurrentMonthYearMinusMonthsString(0));
+            var date = getCurrentMonthYearMinusMonths(0);
+            var transactions = getTransactionsPerDate(date);
+            selectedMonthTransactions = transactions;
+            setMonthData(transactions);
+            ((CategoriesCashFlowFragment) fragments.get(0)).forcedResume();
+        });
+
+        setMonthLayout(6);
+        dateTextView.setText(getCurrentMonthYearMinusMonthsString(0));
+        var date = getCurrentMonthYearMinusMonths(0);
+        var transactions = getTransactionsPerDate(date);
+        selectedMonthTransactions = transactions;
+        setMonthData(transactions);
     }
 
     @Override

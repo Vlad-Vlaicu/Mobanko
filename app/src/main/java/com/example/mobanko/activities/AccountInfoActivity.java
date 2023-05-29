@@ -1,5 +1,7 @@
 package com.example.mobanko.activities;
 
+import static android.view.View.GONE;
+import static android.view.View.VISIBLE;
 import static com.example.mobanko.utils.NumberUtils.getFirstTwoDecimalsFromDouble;
 import static com.example.mobanko.utils.NumberUtils.getWholeValueFromDoubleAsString;
 
@@ -78,13 +80,14 @@ public class AccountInfoActivity extends AppCompatActivity {
         ImageView backArrow = (ImageView) findViewById(R.id.imageView10);
         TextView backText = (TextView) findViewById(R.id.textView27);
 
-
         accountName.setText(account.getName());
         backText.setText(account.getName());
 
         balanceWhole.setText(getWholeValueFromDoubleAsString(account.getBalance()) + ",");
         balanceDecimal.setText(getFirstTwoDecimalsFromDouble(account.getBalance()));
         balanceCurrency.setText(account.getCurrencyType().toString());
+
+        ConstraintLayout footer = findViewById(R.id.account_info_footbar);
 
         backText.setOnClickListener(view -> finish());
         backArrow.setOnClickListener(view -> finish());
@@ -121,6 +124,7 @@ public class AccountInfoActivity extends AppCompatActivity {
                     transactionNavbar.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.selected_navbar, null));
                     functionsNavbar.setBackground(ResourcesCompat.getDrawable(getResources(), R.color.dirty_white2, null));
                     infoNavbar.setBackground(ResourcesCompat.getDrawable(getResources(), R.color.dirty_white2, null));
+                    footer.setVisibility(VISIBLE);
 
 
                 } else if (position == 1) {
@@ -128,12 +132,14 @@ public class AccountInfoActivity extends AppCompatActivity {
                     functionsNavbar.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.selected_navbar, null));
                     transactionNavbar.setBackground(ResourcesCompat.getDrawable(getResources(), R.color.dirty_white2, null));
                     infoNavbar.setBackground(ResourcesCompat.getDrawable(getResources(), R.color.dirty_white2, null));
+                    footer.setVisibility(GONE);
 
                 } else if (position == 2) {
 
                     infoNavbar.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.selected_navbar, null));
                     functionsNavbar.setBackground(ResourcesCompat.getDrawable(getResources(), R.color.dirty_white2, null));
                     transactionNavbar.setBackground(ResourcesCompat.getDrawable(getResources(), R.color.dirty_white2, null));
+                    footer.setVisibility(GONE);
                 }
             }
         });
