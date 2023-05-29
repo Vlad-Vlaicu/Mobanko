@@ -152,7 +152,7 @@ public class OnboardingPhone extends Fragment {
             public void onClick(View view) {
 
                 phoneNumber = phoneEditText.getText().toString();
-                addUserData();
+                //addUserData();
 
 
                 firebaseFirestore.collection("Phones")

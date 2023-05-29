@@ -64,7 +64,7 @@
         <ScrollView
 
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             android:layout_weight="1">
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -75,7 +75,7 @@
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/staticInfoAccount"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     app:layout_constraintTop_toTopOf="parent">
 
                     <View
@@ -252,7 +252,7 @@
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/fragmentHolder"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:background="@color/dirty_white"
                     app:layout_constraintTop_toBottomOf="@id/account_info_navbar">
 

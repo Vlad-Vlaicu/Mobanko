@@ -68,11 +68,21 @@ public class TransactionsFragment extends Fragment {
         adapter = new AccountInfoTransactionsAdapter(view.getContext(), mActivity);
         recycleView.setAdapter(adapter);
         recycleView.setLayoutManager(new LinearLayoutManager(view.getContext()));
+
+        View rootView = getView();
+        if (rootView != null) {
+            rootView.requestLayout();
+        }
     }
 
     public void forcedResume() {
         adapter = new AccountInfoTransactionsAdapter(view.getContext(), mActivity);
         recycleView.setAdapter(adapter);
         recycleView.setLayoutManager(new LinearLayoutManager(view.getContext()));
+
+        View rootView = getView();
+        if (rootView != null) {
+            rootView.requestLayout();
+        }
     }
 }

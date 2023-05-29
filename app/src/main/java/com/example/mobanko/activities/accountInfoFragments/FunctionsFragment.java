@@ -25,4 +25,13 @@ public class FunctionsFragment extends Fragment {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_functions, container, false);
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        View rootView = getView();
+        if (rootView != null) {
+            rootView.requestLayout();
+        }
+    }
 }
