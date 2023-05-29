@@ -142,7 +142,10 @@ public class AccountInfoActivity extends AppCompatActivity {
         functionsNavbar.setOnClickListener(view -> viewPager.setCurrentItem(1, true));
         infoNavbar.setOnClickListener(view -> viewPager.setCurrentItem(2, true));
 
-        statisticsImage.setOnClickListener(view -> startActivity(statisticsIntent));
+        statisticsImage.setOnClickListener(view -> {
+            statisticsIntent.putExtra("accountInfo", getAccount());
+            startActivity(statisticsIntent);
+        });
 
     }
 

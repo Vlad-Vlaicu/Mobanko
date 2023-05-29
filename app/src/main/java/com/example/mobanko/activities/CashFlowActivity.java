@@ -48,7 +48,7 @@ public class CashFlowActivity extends AppCompatActivity {
     ConstraintLayout month5Layout;
     ConstraintLayout month6Layout;
 
-    static List<Transaction> selectedMonthTransactions;
+    static List<Transaction> selectedMonthTransactions = new ArrayList<>();
     TextView incomeBarMonth1;
     TextView expensesBarMonth1;
     TextView incomeBarMonth2;
@@ -61,6 +61,12 @@ public class CashFlowActivity extends AppCompatActivity {
     TextView expensesBarMonth5;
     TextView incomeBarMonth6;
     TextView expensesBarMonth6;
+
+    TextView monthOverall;
+    TextView monthIncome;
+    TextView monthExpenses;
+
+    TextView dateTextView;
 
     public static int dpToPixels(Context context, int dp) {
         return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, context.getResources().getDisplayMetrics());
@@ -117,6 +123,10 @@ public class CashFlowActivity extends AppCompatActivity {
         return selectedMonthTransactions;
     }
 
+    public static List<Transaction> getTransactions() {
+        return selectedMonthTransactions;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -134,10 +144,10 @@ public class CashFlowActivity extends AppCompatActivity {
         fragments.add(new MerchantsCashFlowFragment());
         var fragmentManager = getSupportFragmentManager();
 
-        TextView dateTextView = (TextView) findViewById(R.id.textView72);
-        TextView monthOverall = (TextView) findViewById(R.id.textView79);
-        TextView monthIncome = (TextView) findViewById(R.id.textView80);
-        TextView monthExpenses = (TextView) findViewById(R.id.textView81);
+        dateTextView = (TextView) findViewById(R.id.textView72);
+        monthOverall = (TextView) findViewById(R.id.textView79);
+        monthIncome = (TextView) findViewById(R.id.textView80);
+        monthExpenses = (TextView) findViewById(R.id.textView81);
         TextView categoriesNavbar = (TextView) findViewById(R.id.textView82);
         TextView merchantsNavbar = (TextView) findViewById(R.id.textView83);
         ViewPager2 viewPager = (ViewPager2) findViewById(R.id.cashflowViewpager);
@@ -174,6 +184,7 @@ public class CashFlowActivity extends AppCompatActivity {
                     merchantsNavbar.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.underline_white, null));
                     categoriesNavbar.setTextColor(ResourcesCompat.getColor(getResources(), R.color.expenses_bar_color, null));
                     categoriesNavbar.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.empty_drawable, null));
+                    ((CategoriesCashFlowFragment) fragments.get(0)).forcedResume();
                 }
             }
         });
@@ -234,32 +245,9 @@ public class CashFlowActivity extends AppCompatActivity {
             var transactions = getTransactionsPerDate(date);
             selectedMonthTransactions = transactions;
 
-            var income = getTotalIncome(transactions);
-            var expenses = getTotalExpenses(transactions);
+            setMonthData(transactions);
 
-            var incomeString = String.valueOf(income);
-            if (income == 0) {
-                incomeString = "00";
-            }
-
-            var expensesString = String.valueOf(expenses);
-            if (expenses == 0) {
-                expensesString = "00";
-            } else {
-                expensesString = "-" + expensesString;
-            }
-
-
-            var totalString = String.valueOf(income - expenses);
-            if (income - expenses == 0) {
-                totalString = "00";
-            }
-
-
-            monthOverall.setText(totalString + " " + accountInfo.getCurrencyType());
-            monthIncome.setText(incomeString + " " + accountInfo.getCurrencyType());
-            monthExpenses.setText(expensesString + " " + accountInfo.getCurrencyType());
-
+            ((CategoriesCashFlowFragment) fragments.get(0)).forcedResume();
 
         });
         month2Layout.setOnClickListener(view -> {
@@ -270,32 +258,9 @@ public class CashFlowActivity extends AppCompatActivity {
             var transactions = getTransactionsPerDate(date);
             selectedMonthTransactions = transactions;
 
-            var income = getTotalIncome(transactions);
-            var expenses = getTotalExpenses(transactions);
+            setMonthData(transactions);
 
-            var incomeString = String.valueOf(income);
-            if (income == 0) {
-                incomeString = "00";
-            }
-
-            var expensesString = String.valueOf(expenses);
-            if (expenses == 0) {
-                expensesString = "00";
-            } else {
-                expensesString = "-" + expensesString;
-            }
-
-
-            var totalString = String.valueOf(income - expenses);
-            if (income - expenses == 0) {
-                totalString = "00";
-            }
-
-
-            monthOverall.setText(totalString + " " + accountInfo.getCurrencyType());
-            monthIncome.setText(incomeString + " " + accountInfo.getCurrencyType());
-            monthExpenses.setText(expensesString + " " + accountInfo.getCurrencyType());
-
+            ((CategoriesCashFlowFragment) fragments.get(0)).forcedResume();
         });
 
         month3Layout.setOnClickListener(view -> {
@@ -306,32 +271,9 @@ public class CashFlowActivity extends AppCompatActivity {
             var transactions = getTransactionsPerDate(date);
             selectedMonthTransactions = transactions;
 
-            var income = getTotalIncome(transactions);
-            var expenses = getTotalExpenses(transactions);
+            setMonthData(transactions);
 
-            var incomeString = String.valueOf(income);
-            if (income == 0) {
-                incomeString = "00";
-            }
-
-            var expensesString = String.valueOf(expenses);
-            if (expenses == 0) {
-                expensesString = "00";
-            } else {
-                expensesString = "-" + expensesString;
-            }
-
-
-            var totalString = String.valueOf(income - expenses);
-            if (income - expenses == 0) {
-                totalString = "00";
-            }
-
-
-            monthOverall.setText(totalString + " " + accountInfo.getCurrencyType());
-            monthIncome.setText(incomeString + " " + accountInfo.getCurrencyType());
-            monthExpenses.setText(expensesString + " " + accountInfo.getCurrencyType());
-
+            ((CategoriesCashFlowFragment) fragments.get(0)).forcedResume();
         });
 
         month4Layout.setOnClickListener(view -> {
@@ -342,32 +284,9 @@ public class CashFlowActivity extends AppCompatActivity {
             var transactions = getTransactionsPerDate(date);
             selectedMonthTransactions = transactions;
 
-            var income = getTotalIncome(transactions);
-            var expenses = getTotalExpenses(transactions);
+            setMonthData(transactions);
 
-            var incomeString = String.valueOf(income);
-            if (income == 0) {
-                incomeString = "00";
-            }
-
-            var expensesString = String.valueOf(expenses);
-            if (expenses == 0) {
-                expensesString = "00";
-            } else {
-                expensesString = "-" + expensesString;
-            }
-
-
-            var totalString = String.valueOf(income - expenses);
-            if (income - expenses == 0) {
-                totalString = "00";
-            }
-
-
-            monthOverall.setText(totalString + " " + accountInfo.getCurrencyType());
-            monthIncome.setText(incomeString + " " + accountInfo.getCurrencyType());
-            monthExpenses.setText(expensesString + " " + accountInfo.getCurrencyType());
-
+            ((CategoriesCashFlowFragment) fragments.get(0)).forcedResume();
         });
 
         month5Layout.setOnClickListener(view -> {
@@ -378,32 +297,9 @@ public class CashFlowActivity extends AppCompatActivity {
             var transactions = getTransactionsPerDate(date);
             selectedMonthTransactions = transactions;
 
-            var income = getTotalIncome(transactions);
-            var expenses = getTotalExpenses(transactions);
+            setMonthData(transactions);
 
-            var incomeString = String.valueOf(income);
-            if (income == 0) {
-                incomeString = "00";
-            }
-
-            var expensesString = String.valueOf(expenses);
-            if (expenses == 0) {
-                expensesString = "00";
-            } else {
-                expensesString = "-" + expensesString;
-            }
-
-
-            var totalString = String.valueOf(income - expenses);
-            if (income - expenses == 0) {
-                totalString = "00";
-            }
-
-
-            monthOverall.setText(totalString + " " + accountInfo.getCurrencyType());
-            monthIncome.setText(incomeString + " " + accountInfo.getCurrencyType());
-            monthExpenses.setText(expensesString + " " + accountInfo.getCurrencyType());
-
+            ((CategoriesCashFlowFragment) fragments.get(0)).forcedResume();
         });
 
         month6Layout.setOnClickListener(view -> {
@@ -413,37 +309,16 @@ public class CashFlowActivity extends AppCompatActivity {
             var date = getCurrentMonthYearMinusMonths(0);
             var transactions = getTransactionsPerDate(date);
             selectedMonthTransactions = transactions;
-
-            var income = getTotalIncome(transactions);
-            var expenses = getTotalExpenses(transactions);
-
-            var incomeString = String.valueOf(income);
-            if (income == 0) {
-                incomeString = "00";
-            }
-
-            var expensesString = String.valueOf(expenses);
-            if (expenses == 0) {
-                expensesString = "00";
-            } else {
-                expensesString = "-" + expensesString;
-            }
-
-
-            var totalString = String.valueOf(income - expenses);
-            if (income - expenses == 0) {
-                totalString = "00";
-            }
-
-
-            monthOverall.setText(totalString + " " + accountInfo.getCurrencyType());
-            monthIncome.setText(incomeString + " " + accountInfo.getCurrencyType());
-            monthExpenses.setText(expensesString + " " + accountInfo.getCurrencyType());
-
+            setMonthData(transactions);
+            ((CategoriesCashFlowFragment) fragments.get(0)).forcedResume();
         });
 
-        month6Layout.performClick();
-
+        setMonthLayout(6);
+        dateTextView.setText(getCurrentMonthYearMinusMonthsString(0));
+        var date = getCurrentMonthYearMinusMonths(0);
+        var transactions = getTransactionsPerDate(date);
+        selectedMonthTransactions = transactions;
+        setMonthData(transactions);
     }
 
     List<Transaction> getTransactionsPerDate(LocalDateTime time) {
@@ -538,5 +413,50 @@ public class CashFlowActivity extends AppCompatActivity {
                 .sum();
     }
 
+    private void setMonthData(List<Transaction> transactions) {
 
+        var income = getTotalIncome(transactions);
+        var expenses = getTotalExpenses(transactions);
+
+        var incomeString = String.valueOf(income);
+        if (income == 0) {
+            incomeString = "0";
+        }
+
+        var expensesString = String.valueOf(expenses);
+        if (expenses == 0) {
+            expensesString = "0";
+        } else {
+            expensesString = "-" + expensesString;
+        }
+
+
+        var totalString = String.valueOf(income - expenses);
+        if (income - expenses == 0) {
+            totalString = "0";
+        }
+
+        String overallString = totalString + " " + accountInfo.getCurrencyType();
+        String incomeTotalString = incomeString + " " + accountInfo.getCurrencyType();
+        String expensesTotalString = expensesString + " " + accountInfo.getCurrencyType();
+
+        monthOverall.setText(overallString);
+        monthIncome.setText(incomeTotalString);
+        monthExpenses.setText(expensesTotalString);
+    }
+
+    public void selectCategory() {
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        setMonthLayout(6);
+        dateTextView.setText(getCurrentMonthYearMinusMonthsString(0));
+        var date = getCurrentMonthYearMinusMonths(0);
+        var transactions = getTransactionsPerDate(date);
+        selectedMonthTransactions = transactions;
+        setMonthData(transactions);
+    }
 }

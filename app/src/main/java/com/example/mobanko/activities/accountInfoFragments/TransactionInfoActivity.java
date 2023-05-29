@@ -163,6 +163,7 @@ public class TransactionInfoActivity extends AppCompatActivity {
         transactionInfoTag.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 startActivity(changeTagIntent);
             }
         });
