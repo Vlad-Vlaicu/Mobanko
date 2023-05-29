@@ -40,7 +40,7 @@ public class TimeUtils {
         return shortMonths[monthIndex];
     }
 
-    public static String getCurrentMonthYearMinusMonths(int n) {
+    public static String getCurrentMonthYearMinusMonthsString(int n) {
         // Create a Calendar instance
         Calendar calendar = Calendar.getInstance();
 
@@ -59,5 +59,18 @@ public class TimeUtils {
         String monthYear = monthName + " " + year;
 
         return monthYear;
+    }
+
+    public static LocalDateTime getCurrentMonthYearMinusMonths(int n) {
+        Calendar calendar = Calendar.getInstance();
+
+        // Subtract 'n' months from the current month
+        calendar.add(Calendar.MONTH, -n);
+
+        int month = calendar.get(Calendar.MONTH);
+        int year = calendar.get(Calendar.YEAR);
+
+        return LocalDateTime.of(year, month + 1, 1, 0, 0, 0);
+
     }
 }
