@@ -112,5 +112,53 @@ public enum Categories {
             case "Uncategorized income" -> UNCATEGORIZED_INCOME;
             default -> null;
         };
+
+    }
+
+    public static Drawable getIcon(Categories category, Context context) {
+        return switch (category) {
+            case LIVING_N_ENERGY ->
+                    ResourcesCompat.getDrawable(context.getResources(), R.mipmap.living_n_energy, null);
+            case FOOD_N_DINING ->
+                    ResourcesCompat.getDrawable(context.getResources(), R.mipmap.food_n_dining, null);
+            case HEALTH_N_SELFCARE ->
+                    ResourcesCompat.getDrawable(context.getResources(), R.mipmap.healthcare_icon, null);
+            case CLOTHING_N_SHOES ->
+                    ResourcesCompat.getDrawable(context.getResources(), R.mipmap.clothing_icon, null);
+            case COMMUNICATION_N_MEDIA ->
+                    ResourcesCompat.getDrawable(context.getResources(), R.mipmap.media_icon, null);
+            case LEISURE_N_HOBBIES ->
+                    ResourcesCompat.getDrawable(context.getResources(), R.mipmap.leisure_icon, null);
+            case EDUCATION ->
+                    ResourcesCompat.getDrawable(context.getResources(), R.mipmap.education_icon, null);
+            case CAR ->
+                    ResourcesCompat.getDrawable(context.getResources(), R.mipmap.car_icon, null);
+            case PUBLIC_TRANSPORT_N_TAXI ->
+                    ResourcesCompat.getDrawable(context.getResources(), R.mipmap.public_transport_icon, null);
+            case HOLIDAYS_N_TRAVEL ->
+                    ResourcesCompat.getDrawable(context.getResources(), R.mipmap.holiday_icon, null);
+            case WITHDRAWAL ->
+                    ResourcesCompat.getDrawable(context.getResources(), R.mipmap.withdraw_icon, null);
+            case ALIMONY_N_POCKET_MONEY ->
+                    ResourcesCompat.getDrawable(context.getResources(), R.mipmap.alimony_icon, null);
+            case ONLINE_SHOPS ->
+                    ResourcesCompat.getDrawable(context.getResources(), R.mipmap.online_shops_icon, null);
+            case SAVING_N_INVESTMENT ->
+                    ResourcesCompat.getDrawable(context.getResources(), R.mipmap.savings_icon, null);
+            case TAXES ->
+                    ResourcesCompat.getDrawable(context.getResources(), R.mipmap.taxes_icon, null);
+            case TRANSACTIONS_N_FEES ->
+                    ResourcesCompat.getDrawable(context.getResources(), R.mipmap.transactions_icon, null);
+            case OTHER_EXPENSES ->
+                    ResourcesCompat.getDrawable(context.getResources(), R.mipmap.other_expenses_icon, null);
+            case UNCATEGORIZED_EXPENSES ->
+                    ResourcesCompat.getDrawable(context.getResources(), R.mipmap.uncategorised_expenses_icon, null);
+            case INCOME ->
+                    ResourcesCompat.getDrawable(context.getResources(), R.mipmap.income_icon, null);
+            case ADDITIONAL_INCOME ->
+                    ResourcesCompat.getDrawable(context.getResources(), R.mipmap.additional_income_icon, null);
+            case UNCATEGORIZED_INCOME ->
+                    ResourcesCompat.getDrawable(context.getResources(), R.mipmap.uncategorised_income_icon, null);
+        };
     }
 }

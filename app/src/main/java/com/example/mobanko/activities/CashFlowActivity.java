@@ -22,6 +22,7 @@ import com.example.mobanko.activities.cashflowFragments.CategoriesCashFlowFragme
 import com.example.mobanko.activities.cashflowFragments.MerchantsCashFlowFragment;
 import com.example.mobanko.databinding.ActivityCashFlowBinding;
 import com.example.mobanko.entities.Account;
+import com.example.mobanko.entities.Categories;
 import com.example.mobanko.entities.Transaction;
 
 import java.time.LocalDateTime;
@@ -104,6 +105,9 @@ public class CashFlowActivity extends AppCompatActivity {
     }
 
     public static void changeBarPercentage(TextView bar, int percentage) {
+        if (percentage == 0) {
+            percentage = 1;
+        }
         var params = bar.getLayoutParams();
         params.height = dpToPixels(bar.getContext(), percentage);
         bar.setLayoutParams(params);
@@ -230,6 +234,33 @@ public class CashFlowActivity extends AppCompatActivity {
             var transactions = getTransactionsPerDate(date);
             selectedMonthTransactions = transactions;
 
+            var income = getTotalIncome(transactions);
+            var expenses = getTotalExpenses(transactions);
+
+            var incomeString = String.valueOf(income);
+            if (income == 0) {
+                incomeString = "00";
+            }
+
+            var expensesString = String.valueOf(expenses);
+            if (expenses == 0) {
+                expensesString = "00";
+            } else {
+                expensesString = "-" + expensesString;
+            }
+
+
+            var totalString = String.valueOf(income - expenses);
+            if (income - expenses == 0) {
+                totalString = "00";
+            }
+
+
+            monthOverall.setText(totalString + " " + accountInfo.getCurrencyType());
+            monthIncome.setText(incomeString + " " + accountInfo.getCurrencyType());
+            monthExpenses.setText(expensesString + " " + accountInfo.getCurrencyType());
+
+
         });
         month2Layout.setOnClickListener(view -> {
 
@@ -238,6 +269,32 @@ public class CashFlowActivity extends AppCompatActivity {
             var date = getCurrentMonthYearMinusMonths(4);
             var transactions = getTransactionsPerDate(date);
             selectedMonthTransactions = transactions;
+
+            var income = getTotalIncome(transactions);
+            var expenses = getTotalExpenses(transactions);
+
+            var incomeString = String.valueOf(income);
+            if (income == 0) {
+                incomeString = "00";
+            }
+
+            var expensesString = String.valueOf(expenses);
+            if (expenses == 0) {
+                expensesString = "00";
+            } else {
+                expensesString = "-" + expensesString;
+            }
+
+
+            var totalString = String.valueOf(income - expenses);
+            if (income - expenses == 0) {
+                totalString = "00";
+            }
+
+
+            monthOverall.setText(totalString + " " + accountInfo.getCurrencyType());
+            monthIncome.setText(incomeString + " " + accountInfo.getCurrencyType());
+            monthExpenses.setText(expensesString + " " + accountInfo.getCurrencyType());
 
         });
 
@@ -249,6 +306,32 @@ public class CashFlowActivity extends AppCompatActivity {
             var transactions = getTransactionsPerDate(date);
             selectedMonthTransactions = transactions;
 
+            var income = getTotalIncome(transactions);
+            var expenses = getTotalExpenses(transactions);
+
+            var incomeString = String.valueOf(income);
+            if (income == 0) {
+                incomeString = "00";
+            }
+
+            var expensesString = String.valueOf(expenses);
+            if (expenses == 0) {
+                expensesString = "00";
+            } else {
+                expensesString = "-" + expensesString;
+            }
+
+
+            var totalString = String.valueOf(income - expenses);
+            if (income - expenses == 0) {
+                totalString = "00";
+            }
+
+
+            monthOverall.setText(totalString + " " + accountInfo.getCurrencyType());
+            monthIncome.setText(incomeString + " " + accountInfo.getCurrencyType());
+            monthExpenses.setText(expensesString + " " + accountInfo.getCurrencyType());
+
         });
 
         month4Layout.setOnClickListener(view -> {
@@ -258,6 +341,32 @@ public class CashFlowActivity extends AppCompatActivity {
             var date = getCurrentMonthYearMinusMonths(2);
             var transactions = getTransactionsPerDate(date);
             selectedMonthTransactions = transactions;
+
+            var income = getTotalIncome(transactions);
+            var expenses = getTotalExpenses(transactions);
+
+            var incomeString = String.valueOf(income);
+            if (income == 0) {
+                incomeString = "00";
+            }
+
+            var expensesString = String.valueOf(expenses);
+            if (expenses == 0) {
+                expensesString = "00";
+            } else {
+                expensesString = "-" + expensesString;
+            }
+
+
+            var totalString = String.valueOf(income - expenses);
+            if (income - expenses == 0) {
+                totalString = "00";
+            }
+
+
+            monthOverall.setText(totalString + " " + accountInfo.getCurrencyType());
+            monthIncome.setText(incomeString + " " + accountInfo.getCurrencyType());
+            monthExpenses.setText(expensesString + " " + accountInfo.getCurrencyType());
 
         });
 
@@ -269,6 +378,32 @@ public class CashFlowActivity extends AppCompatActivity {
             var transactions = getTransactionsPerDate(date);
             selectedMonthTransactions = transactions;
 
+            var income = getTotalIncome(transactions);
+            var expenses = getTotalExpenses(transactions);
+
+            var incomeString = String.valueOf(income);
+            if (income == 0) {
+                incomeString = "00";
+            }
+
+            var expensesString = String.valueOf(expenses);
+            if (expenses == 0) {
+                expensesString = "00";
+            } else {
+                expensesString = "-" + expensesString;
+            }
+
+
+            var totalString = String.valueOf(income - expenses);
+            if (income - expenses == 0) {
+                totalString = "00";
+            }
+
+
+            monthOverall.setText(totalString + " " + accountInfo.getCurrencyType());
+            monthIncome.setText(incomeString + " " + accountInfo.getCurrencyType());
+            monthExpenses.setText(expensesString + " " + accountInfo.getCurrencyType());
+
         });
 
         month6Layout.setOnClickListener(view -> {
@@ -278,6 +413,32 @@ public class CashFlowActivity extends AppCompatActivity {
             var date = getCurrentMonthYearMinusMonths(0);
             var transactions = getTransactionsPerDate(date);
             selectedMonthTransactions = transactions;
+
+            var income = getTotalIncome(transactions);
+            var expenses = getTotalExpenses(transactions);
+
+            var incomeString = String.valueOf(income);
+            if (income == 0) {
+                incomeString = "00";
+            }
+
+            var expensesString = String.valueOf(expenses);
+            if (expenses == 0) {
+                expensesString = "00";
+            } else {
+                expensesString = "-" + expensesString;
+            }
+
+
+            var totalString = String.valueOf(income - expenses);
+            if (income - expenses == 0) {
+                totalString = "00";
+            }
+
+
+            monthOverall.setText(totalString + " " + accountInfo.getCurrencyType());
+            monthIncome.setText(incomeString + " " + accountInfo.getCurrencyType());
+            monthExpenses.setText(expensesString + " " + accountInfo.getCurrencyType());
 
         });
 
@@ -295,6 +456,9 @@ public class CashFlowActivity extends AppCompatActivity {
     }
 
     void setBarValues() {
+
+        //bar values are calculate are percent of the biggest value among both income and expenses
+
         var dateMonth1 = getCurrentMonthYearMinusMonths(5);
         var transactionsMonth1 = getTransactionsPerDate(dateMonth1);
         var dateMonth2 = getCurrentMonthYearMinusMonths(4);
@@ -308,15 +472,70 @@ public class CashFlowActivity extends AppCompatActivity {
         var dateMonth6 = getCurrentMonthYearMinusMonths(0);
         var transactionsMonth6 = getTransactionsPerDate(dateMonth6);
 
+        List<Double> valueList = new ArrayList<>();
+        valueList.add(getTotalIncome(transactionsMonth1));
+        valueList.add(getTotalExpenses(transactionsMonth1));
+        valueList.add(getTotalIncome(transactionsMonth2));
+        valueList.add(getTotalExpenses(transactionsMonth2));
+        valueList.add(getTotalIncome(transactionsMonth3));
+        valueList.add(getTotalExpenses(transactionsMonth3));
+        valueList.add(getTotalIncome(transactionsMonth4));
+        valueList.add(getTotalExpenses(transactionsMonth4));
+        valueList.add(getTotalIncome(transactionsMonth5));
+        valueList.add(getTotalExpenses(transactionsMonth5));
+        valueList.add(getTotalIncome(transactionsMonth6));
+        valueList.add(getTotalExpenses(transactionsMonth6));
+
+        double biggestValue = valueList.stream().mapToDouble(Double::valueOf).reduce(Math::max).getAsDouble();
+
+        var incomeMonth1Percentage = Double.valueOf((valueList.get(0) / biggestValue) * 100).intValue();
+        var expensesMonth1Percentage = Double.valueOf((valueList.get(1) / biggestValue) * 100).intValue();
+        var incomeMonth2Percentage = Double.valueOf((valueList.get(2) / biggestValue) * 100).intValue();
+        var expensesMonth2Percentage = Double.valueOf((valueList.get(3) / biggestValue) * 100).intValue();
+        var incomeMonth3Percentage = Double.valueOf((valueList.get(4) / biggestValue) * 100).intValue();
+        var expensesMonth3Percentage = Double.valueOf((valueList.get(5) / biggestValue) * 100).intValue();
+        var incomeMonth4Percentage = Double.valueOf((valueList.get(6) / biggestValue) * 100).intValue();
+        var expensesMonth4Percentage = Double.valueOf((valueList.get(7) / biggestValue) * 100).intValue();
+        var incomeMonth5Percentage = Double.valueOf((valueList.get(8) / biggestValue) * 100).intValue();
+        var expensesMonth5Percentage = Double.valueOf((valueList.get(9) / biggestValue) * 100).intValue();
+        var incomeMonth6Percentage = Double.valueOf((valueList.get(10) / biggestValue) * 100).intValue();
+        var expensesMonth6Percentage = Double.valueOf((valueList.get(11) / biggestValue) * 100).intValue();
+
+        changeBarPercentage(incomeBarMonth1, incomeMonth1Percentage);
+        changeBarPercentage(expensesBarMonth1, expensesMonth1Percentage);
+        changeBarPercentage(incomeBarMonth2, incomeMonth2Percentage);
+        changeBarPercentage(expensesBarMonth2, expensesMonth2Percentage);
+        changeBarPercentage(incomeBarMonth3, incomeMonth3Percentage);
+        changeBarPercentage(expensesBarMonth3, expensesMonth3Percentage);
+        changeBarPercentage(incomeBarMonth4, incomeMonth4Percentage);
+        changeBarPercentage(expensesBarMonth4, expensesMonth4Percentage);
+        changeBarPercentage(incomeBarMonth5, incomeMonth5Percentage);
+        changeBarPercentage(expensesBarMonth5, expensesMonth5Percentage);
+        changeBarPercentage(incomeBarMonth6, incomeMonth6Percentage);
+        changeBarPercentage(expensesBarMonth6, expensesMonth6Percentage);
 
     }
 
     double getTotalIncome(List<Transaction> transactions) {
-        return 0;
+
+        if (transactions.isEmpty()) {
+            return 0;
+        }
+
+        return transactions.stream().filter(t -> Categories.getIncomeCategories().contains(t.getCategories()))
+                .mapToDouble(Transaction::getBalance)
+                .sum();
     }
 
     double getTotalExpenses(List<Transaction> transactions) {
-        return 0;
+
+        if (transactions.isEmpty()) {
+            return 0;
+        }
+
+        return transactions.stream().filter(t -> Categories.getExpensesCategories().contains(t.getCategories()))
+                .mapToDouble(Transaction::getBalance)
+                .sum();
     }
 
 
