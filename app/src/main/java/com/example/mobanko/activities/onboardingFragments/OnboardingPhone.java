@@ -2,25 +2,11 @@ package com.example.mobanko.activities.onboardingFragments;
 
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
-
-import static androidx.core.content.ContextCompat.checkSelfPermission;
-
 import static com.example.mobanko.activities.factory.UserFactory.getUser;
-import static com.example.mobanko.entities.AccountType.CURRENT_ACCOUNT;
-import static com.example.mobanko.entities.CurrencyType.RON;
-import static com.example.mobanko.generators.IBANGenerator.generateIban;
-import static com.example.mobanko.generators.IdGenerator.generateID;
-import static com.example.mobanko.generators.PasswordGenerator.generatePassword;
-
-import static java.util.Collections.emptyList;
 
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.os.CountDownTimer;
-import android.telephony.SmsManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -28,18 +14,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
-import android.Manifest;
-import android.widget.Toast;
-
 import com.example.mobanko.R;
-import com.example.mobanko.activities.MainActivity;
 import com.example.mobanko.activities.OnboardingActivity;
-import com.example.mobanko.entities.Account;
-import com.example.mobanko.entities.User;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -57,16 +38,10 @@ import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthOptions;
 import com.google.firebase.auth.PhoneAuthProvider;
 import com.google.firebase.auth.PhoneMultiFactorGenerator;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
-import org.checkerframework.checker.units.qual.A;
-
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 public class OnboardingPhone extends Fragment {
@@ -179,7 +154,7 @@ public class OnboardingPhone extends Fragment {
                 phoneNumber = phoneEditText.getText().toString();
                 addUserData();
 
-                /*
+
                 firebaseFirestore.collection("Phones")
                         .get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                             @Override
@@ -211,7 +186,7 @@ public class OnboardingPhone extends Fragment {
                             }
                         });
 
-                 */
+
             }
         });
 
