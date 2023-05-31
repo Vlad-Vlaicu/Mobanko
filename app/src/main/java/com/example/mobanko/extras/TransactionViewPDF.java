@@ -39,7 +39,7 @@ public class TransactionViewPDF extends LinearLayoutCompat {
         suma_txt.append(transaction.getBalance().toString());
         currency_transaction_txt.append(CurrencyType.getCurrencyString(transaction.getCurrencyType()));
         data_transaction_txt.append(transaction.getDateOfTransaction().toString());
-        beneficiar_txt.append(User.getUserById(transaction.getSenderID()).getName());
+        beneficiar_txt.append(User.getUserById(transaction.getSenderID().toString()).getName());
         payment_note_txt.append(transaction.getPaymentNote());
     }
 }

@@ -1,6 +1,8 @@
 package com.example.mobanko.entities;
 
-public enum AccountType {
+import java.io.Serializable;
+
+public enum AccountType implements Serializable {
     CURRENT_ACCOUNT, DEPOSIT;
 
     public static String getAccountTypeString(AccountType type) {

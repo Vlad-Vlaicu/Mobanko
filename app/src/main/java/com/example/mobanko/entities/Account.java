@@ -1,6 +1,6 @@
 package com.example.mobanko.entities;
 
-import java.time.LocalDateTime;
+import java.io.Serializable;
 import java.util.List;
 
 import lombok.Data;
@@ -8,13 +8,14 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class Account {
+public class Account implements Serializable {
 
+    private String name = "Current Account";
     private String IBAN;
     private AccountType accountType;
     private double balance;
-    private Long accountHolderID;
+    private String accountHolderID;
     private CurrencyType currencyType;
     private List<Transaction> transactions;
-    private LocalDateTime creationDate;
+    private String creationDate;
 }

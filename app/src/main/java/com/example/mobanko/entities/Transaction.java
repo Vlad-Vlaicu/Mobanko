@@ -1,17 +1,26 @@
 package com.example.mobanko.entities;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
-public class Transaction {
+@NoArgsConstructor
+public class Transaction implements Serializable {
 
-    private Long ID;
-    private Long recipientID;
-    private Long senderID;
+    private String ID;
+    private String recipientID;
+    private String recipientName;
+    private String senderID;
+    private String senderName;
     private Double balance;
     private CurrencyType currencyType;
-    private LocalDateTime dateOfTransaction;
+    private String dateOfTransaction;
     private String paymentNote;
+    private PaymentType paymentType;
+    private Categories categories;
+    private Subcategories subcategories;
 }

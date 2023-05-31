@@ -11,8 +11,19 @@
     <color name="textColor2">#1a67d2</color>
     <color name="gray">#7fa4bd</color>
     <color name="red">#FF0000</color>
-<<<<<<< HEAD
-=======
     <color name="light_gray">#d1dae4</color>
->>>>>>> 0d3af5b6b5f4e938afbcad13b0ffd030dfa0ec9d
+    <color name="cherry">#af0043</color>
+    <color name="dirty_white">#f7f7f7</color>
+    <color name="dirty_white2">#f5f6fa</color>
+    <color name="primary_color">#1c69eb</color>
+    <color name="text_green">#06a81e</color>
+    <color name="text_dark_blue">#061b50</color>
+    <color name="tint_light_gray">#e2e3e5</color>
+    <color name="transfer_background">#e1015a</color>
+    <color name="transfer_background_dark">#bf004d</color>
+    <color name="dark_gray">#757575</color>
+    <color name="blue_writing">#2b67c9</color>
+    <color name="blue_selected">#f2f9ff</color>
+    <color name="expenses_bar_color">#f080ae</color>
+    <color name="selected_bar">#b5014a</color>
 </resources>

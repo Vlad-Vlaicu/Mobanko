@@ -15,13 +15,29 @@
       },
       "oauth_client": [
         {
+          "client_id": "22252430877-rm01e31g7fhueokjbnq0lqnjfnq92dpb.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.mobanko",
+            "certificate_hash": "cc23fbf2ca5f1598e07077fbb055d79c7384fe53"
+          }
+        },
+        {
+          "client_id": "22252430877-u6jrh209ba7v135nqhf3u2bbkjkph2hn.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.mobanko",
+            "certificate_hash": "9ec239d373d05c1df28fd9719ce3ea94427c7630"
+          }
+        },
+        {
           "client_id": "22252430877-h5roiosve6shm0mqkgns8kc3jqbq50st.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyAuHUOzxmLZtQhKBJhGDECoO9BHn1XRoW0"
+          "current_key": "AIzaSyCrtovUowK5h0HpAs_PoCwDD2NU2eiDNSk"
         }
       ],
       "services": {
